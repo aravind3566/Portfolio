@@ -27,17 +27,41 @@
 
     <!-- Customized Bootstrap Stylesheet -->
     <link href="css/style.css" rel="stylesheet" />
+
+    <style>
+      .tags {
+        margin-top: 10px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+    .tags span {
+      background-color: #f1f3f5; /* Light gray background */
+      color: #333; /* Dark text */
+      font-size: 0.875rem; /* Slightly smaller font */
+      padding: 4px 8px;
+      border-radius: 12px; /* Rounded corners */
+      border: 1px solid #ccc; /* Subtle border */
+      white-space: nowrap; /* Prevent tags from breaking into multiple lines */
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    .tags span:hover {
+      background-color: #e2e6ea; /* Slightly darker on hover */
+      transform: scale(1.05); /* Slight zoom effect */
+      cursor: pointer;
+    }
+    </style>
   </head>
 
   <body data-spy="scroll" data-target=".navbar" data-offset="51">
     <div class="wrapper">
       <div class="sidebar">
-        <div
-          class="sidebar-text d-flex flex-column h-100 justify-content-center text-center"
-        >
+        <div class="sidebar-text d-flex flex-column h-100 justify-content-center text-center">
           <img
             class="w-100 img-fluid mb-4"
-            src="img/profile.jpeg"
+            src="img/nopic.jpeg"
             alt="Image"
           />
           <h1 class="mt-2">Aravind</h1>
@@ -51,18 +75,14 @@
             ></a>
             <a
               class="mx-2"
-              href="https://www.facebook.com/aravind.3566?mibextid=ZbWKwL"
+              href="https://www.facebook.com/aravind.3566"
               ><i class="fab fa-facebook-f"></i
             ></a>
-            <!--  <a class="mx-2" href="#"><i class="fab fa-linkedin-in"></i></a>-->
+            <a class="mx-2" href="https://www.linkedin.com/in/itsaravind"><i class="fab fa-linkedin-in"></i></a>
             <a class="mx-2" href="https://www.instagram.com/aravind.3566/"
               ><i class="fab fa-instagram"></i
             ></a>
           </div>
-          <!--   <div class="d-flex align-items-end justify-content-between">
-                            <a href="" class="btn btn-block border-right">Download CV</a>
-                        <a href="#contact" class="btn btn-block btn-scroll">Contact Me</a>
-                    </div>-->
         </div>
         <div
           class="sidebar-icon d-flex flex-column h-100 justify-content-center text-right"
@@ -79,7 +99,7 @@
             </div>
             <div class="col-12">
               <p>
-               As a mobile app developer specializing in both Android and iOS versions, I possess a strong command of React Native framework, enabling me to create cross-platform applications efficiently. My skills include crafting intuitive user interfaces using HTML5, CSS3, and JavaScript, along with expertise in React Native for seamless mobile experiences. Additionally, I excel in developing RESTful APIs and integrating them with frontend applications to deliver comprehensive user experiences.
+              As a mobile app developer specializing in both Android and iOS versions, I possess a strong command of React Native framework, enabling me to create cross-platform applications efficiently. My skills include crafting intuitive user interfaces using HTML5, CSS3, and JavaScript, along with expertise in React Native for seamless mobile experiences. Additionally, I excel in developing RESTful APIs and integrating them with frontend applications to deliver comprehensive user experiences.
               </p>
               <div class="row">
                 <div class="col-sm-6 py-1">
@@ -96,19 +116,11 @@
                 </div>
                 <div class="col-sm-6 py-1">
                   <h5 class="d-inline text-primary">Experience:</h5>
-                  1.5 Years
-                </div>
-                <div class="col-sm-6 py-1">
-                  <h5 class="d-inline text-primary">Phone:</h5>
-                  +91 8508886001
+                  <span id="experience"></span>
                 </div>
                 <div class="col-sm-6 py-1">
                   <h5 class="d-inline text-primary">Email:</h5>
                   aravinddevaraj@hotmail.com
-                </div>
-                <div class="col-sm-6 py-1">
-                  <h5 class="d-inline text-primary">Address:</h5>
-                  Coimbatore, India
                 </div>
                 <div class="col-sm-6 py-1">
                   <h5 class="d-inline text-primary">Freelance:</h5>
@@ -124,6 +136,17 @@
                       style="width: 40%; height: auto"
                       src="./img/playstore.png"
                   /></a>
+                </div>
+                <div class="col-sm-6 py-1">
+                  <h5 class="d-inline text-primary">Git Repo:</h5>
+                  <a
+                    target="_blank"
+                    href="https://github.com/aravind3566"
+                  >
+                  <svg height="32" aria-hidden="true" viewBox="0 0 24 24" version="1.1" width="32" data-view-component="true" class="octicon octicon-mark-github">
+                    <path d="M12.5.75C6.146.75 1 5.896 1 12.25c0 5.089 3.292 9.387 7.863 10.91.575.101.79-.244.79-.546 0-.273-.014-1.178-.014-2.142-2.889.532-3.636-.704-3.866-1.35-.13-.331-.69-1.352-1.18-1.625-.402-.216-.977-.748-.014-.762.906-.014 1.553.834 1.769 1.179 1.035 1.74 2.688 1.25 3.349.948.1-.747.402-1.25.733-1.538-2.559-.287-5.232-1.279-5.232-5.678 0-1.25.445-2.285 1.178-3.09-.115-.288-.517-1.467.115-3.048 0 0 .963-.302 3.163 1.179.92-.259 1.897-.388 2.875-.388.977 0 1.955.13 2.875.388 2.2-1.495 3.162-1.179 3.162-1.179.633 1.581.23 2.76.115 3.048.733.805 1.179 1.825 1.179 3.09 0 4.413-2.688 5.39-5.247 5.678.417.36.776 1.05.776 2.128 0 1.538-.014 2.774-.014 3.162 0 .302.216.662.79.547C20.709 21.637 24 17.324 24 12.25 24 5.896 18.854.75 12.5.75Z"></path>
+                </svg>
+                  </a>
                 </div>
               </div>
             </div>
@@ -141,13 +164,12 @@
               <div class="skill mb-4">
                 <div class="d-flex justify-content-between">
                   <p class="mb-2">HTML</p>
-                  <p class="mb-2">95%</p>
                 </div>
                 <div class="progress">
                   <div
                     class="progress-bar bg-primary"
                     role="progressbar"
-                    aria-valuenow="95"
+                    aria-valuenow="80"
                     aria-valuemin="0"
                     aria-valuemax="100"
                   ></div>
@@ -156,7 +178,6 @@
               <div class="skill mb-4">
                 <div class="d-flex justify-content-between">
                   <p class="mb-2">CSS</p>
-                  <p class="mb-2">70%</p>
                 </div>
                 <div class="progress">
                   <div
@@ -171,40 +192,6 @@
               <div class="skill mb-4">
                 <div class="d-flex justify-content-between">
                   <p class="mb-2">PHP</p>
-                  <p class="mb-2">80%</p>
-                </div>
-                <div class="progress">
-                  <div
-                    class="progress-bar bg-danger"
-                    role="progressbar"
-                    aria-valuenow="80"
-                    aria-valuemin="0"
-                    aria-valuemax="100"
-                  ></div>
-                </div>
-              </div>
-              <div class="skill mb-4">
-                <div class="d-flex justify-content-between">
-                  <p class="mb-2">React Native</p>
-                  <p class="mb-2">80%</p>
-                </div>
-                <div class="progress">
-                  <div
-                    class="progress-bar bg-info"
-                    role="progressbar"
-                    aria-valuenow="80"
-                    aria-valuemin="0"
-                    aria-valuemax="100"
-                  ></div>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-sm-6">
-              <div class="skill mb-4">
-                <div class="d-flex justify-content-between">
-                  <p class="mb-2">Javascript</p>
-                  <p class="mb-2">70%</p>
                 </div>
                 <div class="progress">
                   <div
@@ -218,8 +205,38 @@
               </div>
               <div class="skill mb-4">
                 <div class="d-flex justify-content-between">
+                  <p class="mb-2">React Native</p>
+                </div>
+                <div class="progress">
+                  <div
+                    class="progress-bar bg-info"
+                    role="progressbar"
+                    aria-valuenow="75"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                  ></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-sm-6">
+              <div class="skill mb-4">
+                <div class="d-flex justify-content-between">
+                  <p class="mb-2">Javascript</p>
+                </div>
+                <div class="progress">
+                  <div
+                    class="progress-bar bg-danger"
+                    role="progressbar"
+                    aria-valuenow="60"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                  ></div>
+                </div>
+              </div>
+              <div class="skill mb-4">
+                <div class="d-flex justify-content-between">
                   <p class="mb-2">React</p>
-                  <p class="mb-2">60%</p>
                 </div>
                 <div class="progress">
                   <div
@@ -234,13 +251,12 @@
               <div class="skill mb-4">
                 <div class="d-flex justify-content-between">
                   <p class="mb-2">MySQL</p>
-                  <p class="mb-2">80%</p>
                 </div>
                 <div class="progress">
                   <div
                     class="progress-bar bg-info"
                     role="progressbar"
-                    aria-valuenow="80"
+                    aria-valuenow="75"
                     aria-valuemin="0"
                     aria-valuemax="100"
                   ></div>
@@ -249,13 +265,12 @@
               <div class="skill mb-4">
                 <div class="d-flex justify-content-between">
                   <p class="mb-2">Jquery</p>
-                  <p class="mb-2">75%</p>
                 </div>
                 <div class="progress">
                   <div
                     class="progress-bar bg-info"
                     role="progressbar"
-                    aria-valuenow="75"
+                    aria-valuenow="70"
                     aria-valuemin="0"
                     aria-valuemax="100"
                   ></div>
@@ -270,7 +285,7 @@
         <div class="container bg-white py-5">
           <div class="row px-3">
             <div class="col-12">
-              <h2 class="title position-relative pb-2 mb-4">Expericence</h2>
+              <h2 class="title position-relative pb-2 mb-4">Experience</h2>
             </div>
             <div class="col-12">
               <div class="border-left border-primary pt-2 pl-4 ml-2">
@@ -283,36 +298,23 @@
                   <p class="mb-2">
                     I Apparel IGL, Cambodia | <small>Jul 2023 - Till now</small>
                   </p>
-                  <ul>
-                    <li>
-                      Led the development of mobile applications for internal
-                      operations, focusing on enhancing efficiency and user
-                      experience.
-                    </li>
-                    <li>
-                      Collaborated with cross-functional teams to gather
-                      requirements, design user interfaces, and implement
-                      features.
-                    </li>
-                    <li>
-                      Implemented RESTful API integrations to connect mobile
-                      applications with backend services, ensuring real-time
-                      data synchronization.
-                    </li>
-                    <li>
-                      Utilized React Native to develop and maintain
-                      cross-platform mobile applications for Android and iOS
-                      devices.
-                    </li>
-                    <li>
-                      Implemented state management using Redux to efficiently
-                      manage and update application state.
-                    </li>
-                    <li>
-                      Conducted code reviews to ensure code quality, adherence
-                      to best practices.
-                    </li>
-                  </ul>
+                  <p class="tags">
+                    <span>#ReactNative</span>
+                    <span>#JavaScript</span>
+                    <span>#AndroidStudio</span>
+                    <span>#Xcode</span>
+                    <span>#UI/UX</span>
+                    <span>#Firebase</span>
+                    <span>#Git</span>
+                    <span>#Next.js</span>
+                    <span>#Ajax</span>
+                    <span>#jQuery</span>
+                    <span>#HTML5</span>
+                    <span>#CSS</span>
+                    <span>#zustand</span>
+                    <span>#Redux.js</span>
+                    <span>#NoSql</span>
+                  </p>                  
                 </div>
                 <div class="position-relative mb-4">
                   <i
@@ -323,30 +325,21 @@
                   <p class="mb-2">
                     Huminn (OPC) Pvt ltd, India | <small>2022 - Jul 2023</small>
                   </p>
-                  <ul>
-                    <li>
-                      Developed and maintained full stack web applications using
-                      modern technologies such as HTML5, CSS3, JavaScript,
-                      jQuery and popular JavaScript frameworks (React, React
-                      Native).
-                    </li>
-                    <li>
-                      Created RESTful APIs and integrated them with frontend
-                      applications to provide seamless user experiences.
-                    </li>
-                    <li>
-                      Integrated third-party APIs and services, such as delivery
-                      fleet management, into web applications.
-                    </li>
-                    <li>
-                      Identified and resolved software defects, bugs, and
-                      performance issues in a timely manner.
-                    </li>
-                    <li>
-                      Designed and developed scalable and efficient database
-                      structures using MySQL Database.
-                    </li>
-                  </ul>
+                  <p class="tags">
+                    <span>#ReactNative</span>
+                    <span>#React</span>
+                    <span>#AndroidStudio</span>
+                    <span>#Firebase</span>
+                    <span>#Xcode</span>
+                    <span>#PHP</span>
+                    <span>#MySql</span>
+                    <span>#Ajax</span>
+                    <span>#jQuery</span>
+                    <span>#HTML5</span>
+                    <span>#CSS</span>
+                    <span>#RESTfulAPIs</span>
+                    <span>#Ionic</span>
+                  </p>                  
                 </div>
               </div>
             </div>
@@ -359,6 +352,10 @@
     <!-- Back to Top -->
     <a href="#" class="back-to-top"><i class="fa fa-angle-double-up"></i></a>
 
+    <script>
+      var experience = new Date().getFullYear() - 2022;
+      document.getElementById("experience").innerText = experience + " years";
+    </script>
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
