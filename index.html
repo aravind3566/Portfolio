@@ -1,311 +1,491 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="utf-8" />
-  <title>Aravind</title>
-  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aravind — React Native Developer</title>
+<meta name="description" content="Aravind — React Native developer in Phnom Penh, Cambodia. I build cross-platform apps and the native Android/Kotlin modules behind them.">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0a0e14">
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="img/favicon/favicon-96x96.png" sizes="96x96" />
-  <link rel="icon" type="image/svg+xml" href="img/favicon/favicon.svg" />
-  <link rel="shortcut icon" href="img/favicon/favicon.ico" />
-  <link rel="apple-touch-icon" sizes="180x180" href="img/favicon/apple-touch-icon.png" />
-  <link rel="manifest" href="img/favicon/site.webmanifest" />
+<!-- Favicon: inline gradient "A>" mark, no external file needed -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%237f52ff'/%3E%3Cstop offset='1' stop-color='%23f88909'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='14' fill='%230a0e14'/%3E%3Ctext x='32' y='42' font-family='monospace' font-size='28' font-weight='700' fill='url(%23g)' text-anchor='middle'%3EA%3E%3C/text%3E%3C/svg%3E">
 
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.gstatic.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Averia+Serif+Libre:wght@400;700&family=Poppins&display=swap"
-    rel="stylesheet" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- Font Awesome -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet" />
-  <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet" /> -->
+<style>
+  :root{
+    --bg:#0a0e14;
+    --bg-panel:#10161f;
+    --bg-panel-alt:#0d1219;
+    --border:#1c2530;
+    --border-soft:#161d27;
+    --text:#cdd6e0;
+    --text-dim:#7d8896;
+    --text-faint:#48525f;
+    --accent-violet:#7f52ff;
+    --accent-orange:#f88909;
+    --accent-cyan:#56d4dd;
+    --accent-green:#3ddc84;
+    --grad: linear-gradient(120deg, var(--accent-violet), var(--accent-orange));
+    --mono: 'JetBrains Mono', ui-monospace, monospace;
+    --sans: 'IBM Plex Sans', system-ui, sans-serif;
+    --maxw: 920px;
+  }
 
-  <!-- Libraries Stylesheet -->
-  <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet" />
-  <link href="lib/lightbox/css/lightbox.min.css" rel="stylesheet" />
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important;}
+  }
 
-  <!-- Customized Bootstrap Stylesheet -->
-  <link href="css/style.css" rel="stylesheet" />
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--sans);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
 
-  <style>
-    .tags {
-      margin-top: 10px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
+  /* faint dot-grid texture */
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    background-image: radial-gradient(var(--border-soft) 1px, transparent 1px);
+    background-size: 28px 28px;
+    opacity:0.5;
+    pointer-events:none;
+    z-index:0;
+  }
 
-    .tags span {
-      background-color: #f1f3f5;
-      /* Light gray background */
-      color: #333;
-      /* Dark text */
-      font-size: 0.875rem;
-      /* Slightly smaller font */
-      padding: 4px 8px;
-      border-radius: 12px;
-      /* Rounded corners */
-      border: 1px solid #ccc;
-      /* Subtle border */
-      white-space: nowrap;
-      /* Prevent tags from breaking into multiple lines */
-      transition: background-color 0.3s, transform 0.2s;
-    }
+  .skip-link{
+    position:absolute; left:-999px; top:0;
+    background:var(--accent-violet); color:#fff; padding:.6rem 1rem;
+    z-index:100; border-radius:0 0 6px 0; font-family:var(--mono); font-size:.85rem;
+  }
+  .skip-link:focus{ left:0; }
 
-    .tags span:hover {
-      background-color: #e2e6ea;
-      /* Slightly darker on hover */
-      transform: scale(1.05);
-      /* Slight zoom effect */
-      cursor: pointer;
-    }
-  </style>
+  a{ color:inherit; text-decoration:none; }
+  :focus-visible{ outline:2px solid var(--accent-cyan); outline-offset:3px; border-radius:2px; }
+
+  img,svg{ display:block; max-width:100%; }
+
+  /* ---------- Topbar ---------- */
+  .topbar{
+    position:sticky; top:0; z-index:50;
+    background:rgba(10,14,20,0.85);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--border);
+  }
+  .topbar-inner{
+    max-width:var(--maxw); margin:0 auto;
+    display:flex; align-items:center; gap:1rem;
+    padding:.85rem 1.5rem;
+  }
+  .brand-mark{
+    font-family:var(--mono); font-weight:800; font-size:1.1rem;
+    background:var(--grad); -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .tabs{
+    display:flex; gap:.25rem;
+    overflow-x:auto;
+    flex:1;
+    scrollbar-width:none;
+  }
+  .tabs::-webkit-scrollbar{ display:none; }
+  .tab{
+    font-family:var(--mono); font-size:.82rem; color:var(--text-dim);
+    padding:.5rem .75rem; white-space:nowrap;
+    border-bottom:2px solid transparent;
+    transition:color .2s ease, border-color .2s ease;
+  }
+  .tab:hover{ color:var(--text); }
+  .tab.active{
+    color:var(--text);
+    border-image: var(--grad) 1;
+    border-bottom:2px solid;
+    border-image-slice:1;
+  }
+  .repo-btn{
+    font-family:var(--mono); font-size:.8rem; color:var(--text-dim);
+    border:1px solid var(--border); border-radius:6px;
+    padding:.4rem .7rem; white-space:nowrap;
+    transition:border-color .2s ease, color .2s ease;
+  }
+  .repo-btn:hover{ color:var(--text); border-color:var(--accent-violet); }
+
+  main{ position:relative; z-index:1; }
+
+  /* ---------- Reveal on scroll ---------- */
+  .reveal{ opacity:0; transform:translateY(14px); transition:opacity .6s ease, transform .6s ease; }
+  .reveal.in-view{ opacity:1; transform:translateY(0); }
+  @media (prefers-reduced-motion: reduce){
+    .reveal{ opacity:1; transform:none; }
+  }
+
+  /* ---------- Hero ---------- */
+  .hero{ padding: clamp(2.5rem,6vw,5rem) 1.5rem 3rem; }
+  .hero-inner{
+    max-width:var(--maxw); margin:0 auto;
+    display:grid; grid-template-columns:auto 1fr; gap:1.5rem;
+    background:var(--bg-panel);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding: clamp(1.5rem,4vw,3rem);
+  }
+  .gutter{
+    font-family:var(--mono); font-size:.78rem; color:var(--text-faint);
+    display:flex; flex-direction:column; gap:.55rem;
+    padding-top:.4rem; user-select:none;
+  }
+  .eyebrow{
+    font-family:var(--mono); font-size:.82rem; color:var(--accent-green);
+    margin:0 0 .9rem;
+  }
+  .hero h1{
+    font-family:var(--mono); font-weight:800;
+    font-size:clamp(2.2rem, 6vw, 3.4rem);
+    margin:0 0 .6rem; letter-spacing:-0.01em;
+  }
+  .grad-text{
+    background:var(--grad); -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .role{
+    font-family:var(--mono); font-size:clamp(1rem,2.4vw,1.25rem);
+    color:var(--accent-cyan); margin:0 0 1.2rem; min-height:1.6em;
+  }
+  .role .prompt{ color:var(--text-dim); margin-right:.4em; }
+  .cursor{ display:inline-block; margin-left:2px; animation:blink 1s step-end infinite; color:var(--accent-cyan); }
+  @keyframes blink{ 50%{ opacity:0; } }
+
+  .bio{
+    max-width:56ch; color:var(--text); font-size:1.02rem; margin:0 0 1.6rem;
+  }
+
+  .badges{
+    list-style:none; display:flex; flex-wrap:wrap; gap:.6rem;
+    padding:0; margin:0 0 1.8rem;
+  }
+  .badges li{
+    display:flex; overflow:hidden; border-radius:5px; border:1px solid var(--border);
+    font-family:var(--mono); font-size:.78rem;
+  }
+  .badge-key{ background:var(--bg-panel-alt); color:var(--text-dim); padding:.35rem .6rem; }
+  .badge-val{ background:#161d29; color:var(--text); padding:.35rem .6rem; font-weight:600; }
+
+  .cta-row{ display:flex; flex-wrap:wrap; gap:.9rem; }
+  .btn{
+    font-family:var(--mono); font-size:.88rem; font-weight:600;
+    padding:.7rem 1.3rem; border-radius:7px; border:1px solid transparent;
+    transition:transform .15s ease, opacity .15s ease, border-color .15s ease;
+    display:inline-block;
+  }
+  .btn:hover{ transform:translateY(-2px); }
+  .btn-primary{ background:var(--grad); color:#0a0e14; }
+  .btn-primary:hover{ opacity:.92; }
+  .btn-ghost{ border-color:var(--border); color:var(--text); }
+  .btn-ghost:hover{ border-color:var(--accent-cyan); }
+
+  /* ---------- Sections ---------- */
+  .section{ max-width:var(--maxw); margin:0 auto; padding: 3.5rem 1.5rem; }
+  .section-num{
+    display:block; font-family:var(--mono); font-size:.8rem; color:var(--text-dim); margin-bottom:.5rem;
+  }
+  .section-title{
+    font-family:var(--mono); font-weight:700; font-size:clamp(1.4rem,3.4vw,1.9rem);
+    margin:0 0 .5rem;
+  }
+  .section-sub{ color:var(--text-dim); margin:0 0 2rem; max-width:60ch; }
+
+  /* ---------- Project cards ---------- */
+  .project-grid{
+    display:grid; grid-template-columns:repeat(auto-fit, minmax(240px,1fr));
+    gap:1.1rem;
+  }
+  .card{
+    background:var(--bg-panel); border:1px solid var(--border); border-radius:12px;
+    padding:1.3rem; display:flex; flex-direction:column; gap:.7rem;
+    transition:transform .2s ease, border-color .2s ease;
+  }
+  .card:hover{ transform:translateY(-4px); border-color:var(--accent-violet); }
+  .card-name{ font-family:var(--mono); font-weight:600; font-size:.98rem; color:var(--text); word-break:break-word; }
+  .card-desc{ color:var(--text-dim); font-size:.9rem; margin:0; flex:1; }
+  .card-meta{ display:flex; align-items:center; gap:1rem; font-family:var(--mono); font-size:.78rem; color:var(--text-dim); }
+  .lang-dot{ width:9px; height:9px; border-radius:50%; background:var(--accent-violet); display:inline-block; margin-right:.4em; }
+  .card-link{ font-size:.82rem; color:var(--accent-cyan); align-self:flex-start; }
+  .card-link:hover{ text-decoration:underline; }
+
+  .link-more{
+    display:inline-block; margin-top:1.8rem; font-family:var(--mono); font-size:.9rem; color:var(--accent-orange);
+  }
+  .link-more:hover{ text-decoration:underline; }
+
+  /* ---------- Code block (stack) ---------- */
+  .code-block{
+    background:var(--bg-panel-alt); border:1px solid var(--border); border-radius:12px;
+    padding:1.5rem 1.7rem; overflow-x:auto;
+    font-family:var(--mono); font-size:.88rem; line-height:1.85;
+  }
+  .code-block .tok-key{ color:var(--accent-cyan); }
+  .code-block .tok-punc{ color:var(--text-dim); }
+  .code-block .tok-str{ color:var(--accent-green); }
+  .code-block .tok-com{ color:var(--text-faint); font-style:italic; }
+
+  /* ---------- Achievements ---------- */
+  .achv-grid{
+    list-style:none; padding:0; margin:0;
+    display:grid; grid-template-columns:repeat(auto-fit, minmax(210px,1fr));
+    gap:1rem;
+  }
+  .achv{
+    background:var(--bg-panel); border:1px solid var(--border); border-radius:10px;
+    padding:1rem 1.1rem; display:flex; gap:.8rem; align-items:flex-start;
+  }
+  .achv-icon{ font-size:1.3rem; line-height:1; }
+  .achv-name{ font-family:var(--mono); font-weight:600; font-size:.88rem; display:block; margin-bottom:.2rem; }
+  .achv-desc{ color:var(--text-dim); font-size:.8rem; margin:0; }
+
+  /* ---------- Contact / terminal ---------- */
+  .terminal{
+    background:var(--bg-panel-alt); border:1px solid var(--border); border-radius:12px;
+    padding:1.5rem 1.7rem; font-family:var(--mono); font-size:.9rem;
+  }
+  .term-line{
+    display:flex; align-items:center; gap:.6rem; flex-wrap:wrap;
+    padding:.4rem 0; border-bottom:1px solid var(--border-soft);
+  }
+  .term-line:last-child{ border-bottom:none; }
+  .term-line .prompt{ color:var(--accent-orange); }
+  .term-line a{ color:var(--accent-cyan); }
+  .term-line a:hover{ text-decoration:underline; }
+  .copy-btn{
+    font-family:var(--mono); font-size:.72rem; color:var(--text-dim);
+    background:transparent; border:1px solid var(--border); border-radius:5px;
+    padding:.15rem .5rem; cursor:pointer; margin-left:auto;
+    transition:color .2s ease, border-color .2s ease;
+  }
+  .copy-btn:hover{ color:var(--text); border-color:var(--accent-cyan); }
+
+  .footer{
+    text-align:center; padding:2.5rem 1.5rem 3rem;
+    font-family:var(--mono); font-size:.8rem; color:var(--text-faint);
+  }
+
+  @media (max-width:640px){
+    .hero-inner{ grid-template-columns:1fr; }
+    .gutter{ display:none; }
+    .term-line{ flex-direction:column; align-items:flex-start; gap:.2rem; }
+    .copy-btn{ margin-left:0; }
+  }
+</style>
 </head>
+<body>
 
-<body data-spy="scroll" data-target=".navbar" data-offset="51">
-  <div class="wrapper">
-    <div class="sidebar">
-      <div class="sidebar-text d-flex flex-column h-100 justify-content-center text-center">
-        <img class="w-100 img-fluid mb-4" src="img/dp.png" alt="Image" />
-        <h1 class="mt-2">Aravind</h1>
-        <div class="mb-4" style="height: 22px">
-          <h4 class="typed-text-output d-inline-block text-body"></h4>
-          <div class="typed-text d-none">Mobile App Developer</div>
-        </div>
-        <div class="d-flex justify-content-center mt-auto mb-3">
-          <a class="mx-2" target="_blank" href="https://x.com/aravind3566"><i class="fab fa-x-twitter"></i></a>
-          <a class="mx-2" target="_blank" href="https://www.facebook.com/aravind.3566">
-            <i class="fab fa-facebook-f"></i></a>
-          <a class="mx-2" target="_blank" href="https://www.linkedin.com/in/itsaravind">
-            <i class="fab fa-linkedin-in"></i></a>
-          <a class="mx-2" target="_blank" href="https://www.instagram.com/aravind.3566/">
-            <i class="fab fa-instagram"></i></a>
-          <a class="mx-2" target="_blank" href="https://github.com/aravind3566/">
-            <i class="fab fa-github"></i></a>
-        </div>
-      </div>
-      <div class="sidebar-icon d-flex flex-column h-100 justify-content-center text-right">
-        <i class="fas fa-2x fa-angle-double-right text-primary"></i>
-      </div>
-    </div>
-    <div class="content">
-      <!-- About Start -->
-      <div class="container bg-white pt-5">
-        <div class="row px-3">
-          <div class="col-12">
-            <h2 class="title position-relative pb-2 mb-4">Hello there</h2>
-          </div>
-          <div class="col-12">
-            <p>
-              As a mobile app developer specializing in both Android and iOS versions, I possess a strong command of
-              React Native framework, enabling me to create cross-platform applications efficiently. My skills include
-              crafting intuitive user interfaces using HTML5, CSS3, and JavaScript, along with expertise in React Native
-              for seamless mobile experiences. Additionally, I excel in developing RESTful APIs and integrating them
-              with frontend applications to deliver comprehensive user experiences.
-            </p>
-            <div class="row">
-              <div class="col-sm-12 py-3">
-                <h5 class="d-inline text-primary">Mobile Apps:</h5>
-                <a target="_blank" href="https://play.google.com/store/apps/dev?id=9079818920904162163">
-                  <svg height="32" width="32" aria-hidden="true" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
-                    <path fill="none" d="M0,0h40v40H0V0z"></path>
-                    <g>
-                      <path
-                        d="M19.7,19.2L4.3,35.3c0,0,0,0,0,0c0.5,1.7,2.1,3,4,3c0.8,0,1.5-0.2,2.1-0.6l0,0l17.4-9.9L19.7,19.2z"
-                        fill="#EA4335"></path>
-                      <path
-                        d="M35.3,16.4L35.3,16.4l-7.5-4.3l-8.4,7.4l8.5,8.3l7.5-4.2c1.3-0.7,2.2-2.1,2.2-3.6C37.5,18.5,36.6,17.1,35.3,16.4z"
-                        fill="#FBBC04"></path>
-                      <path d="M4.3,4.7C4.2,5,4.2,5.4,4.2,5.8v28.5c0,0.4,0,0.7,0.1,1.1l16-15.7L4.3,4.7z" fill="#4285F4">
-                      </path>
-                      <path d="M19.8,20l8-7.9L10.5,2.3C9.9,1.9,9.1,1.7,8.3,1.7c-1.9,0-3.6,1.3-4,3c0,0,0,0,0,0L19.8,20z"
-                        fill="#34A853"></path>
-                    </g>
-                  </svg>
-              </div>
-              <div class="col-sm-12 py-3">
-                <h5 class="d-inline text-primary">Git Repo:</h5>
-                <a target="_blank" href="https://github.com/aravind3566">
-                  <svg height="32" aria-hidden="true" viewBox="0 0 24 24" version="1.1" width="32"
-                    data-view-component="true">
-                    <path
-                      d="M12.5.75C6.146.75 1 5.896 1 12.25c0 5.089 3.292 9.387 7.863 10.91.575.101.79-.244.79-.546 0-.273-.014-1.178-.014-2.142-2.889.532-3.636-.704-3.866-1.35-.13-.331-.69-1.352-1.18-1.625-.402-.216-.977-.748-.014-.762.906-.014 1.553.834 1.769 1.179 1.035 1.74 2.688 1.25 3.349.948.1-.747.402-1.25.733-1.538-2.559-.287-5.232-1.279-5.232-5.678 0-1.25.445-2.285 1.178-3.09-.115-.288-.517-1.467.115-3.048 0 0 .963-.302 3.163 1.179.92-.259 1.897-.388 2.875-.388.977 0 1.955.13 2.875.388 2.2-1.495 3.162-1.179 3.162-1.179.633 1.581.23 2.76.115 3.048.733.805 1.179 1.825 1.179 3.09 0 4.413-2.688 5.39-5.247 5.678.417.36.776 1.05.776 2.128 0 1.538-.014 2.774-.014 3.162 0 .302.216.662.79.547C20.709 21.637 24 17.324 24 12.25 24 5.896 18.854.75 12.5.75Z">
-                    </path>
-                  </svg>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- About End -->
+<a class="skip-link" href="#main">Skip to content</a>
 
-      <!-- Skills Start -->
-      <div class="container bg-white py-5">
-        <div class="row px-3">
-          <div class="col-12">
-            <h2 class="title position-relative pb-2 mb-4">Skills</h2>
-          </div>
-          <div class="col-sm-6">
-            <div class="skill mb-4">
-              <div class="d-flex justify-content-between">
-                <p class="mb-2">HTML</p>
-              </div>
-              <div class="progress">
-                <div class="progress-bar bg-primary" role="progressbar" aria-valuenow="80" aria-valuemin="0"
-                  aria-valuemax="100"></div>
-              </div>
-            </div>
-            <div class="skill mb-4">
-              <div class="d-flex justify-content-between">
-                <p class="mb-2">CSS</p>
-              </div>
-              <div class="progress">
-                <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="70" aria-valuemin="0"
-                  aria-valuemax="100"></div>
-              </div>
-            </div>
-            <div class="skill mb-4">
-              <div class="d-flex justify-content-between">
-                <p class="mb-2">PHP</p>
-              </div>
-              <div class="progress">
-                <div class="progress-bar bg-danger" role="progressbar" aria-valuenow="70" aria-valuemin="0"
-                  aria-valuemax="100"></div>
-              </div>
-            </div>
-            <div class="skill mb-4">
-              <div class="d-flex justify-content-between">
-                <p class="mb-2">React Native</p>
-              </div>
-              <div class="progress">
-                <div class="progress-bar bg-info" role="progressbar" aria-valuenow="75" aria-valuemin="0"
-                  aria-valuemax="100"></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-sm-6">
-            <div class="skill mb-4">
-              <div class="d-flex justify-content-between">
-                <p class="mb-2">Javascript</p>
-              </div>
-              <div class="progress">
-                <div class="progress-bar bg-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                  aria-valuemax="100"></div>
-              </div>
-            </div>
-            <div class="skill mb-4">
-              <div class="d-flex justify-content-between">
-                <p class="mb-2">React</p>
-              </div>
-              <div class="progress">
-                <div class="progress-bar bg-dark" role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                  aria-valuemax="100"></div>
-              </div>
-            </div>
-            <div class="skill mb-4">
-              <div class="d-flex justify-content-between">
-                <p class="mb-2">MySQL</p>
-              </div>
-              <div class="progress">
-                <div class="progress-bar bg-info" role="progressbar" aria-valuenow="75" aria-valuemin="0"
-                  aria-valuemax="100"></div>
-              </div>
-            </div>
-            <div class="skill mb-4">
-              <div class="d-flex justify-content-between">
-                <p class="mb-2">Jquery</p>
-              </div>
-              <div class="progress">
-                <div class="progress-bar bg-info" role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                  aria-valuemax="100"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Skills End -->
-
-      <!-- Education Start -->
-      <div class="container bg-white py-5">
-        <div class="row px-3">
-          <div class="col-12">
-            <h2 class="title position-relative pb-2 mb-4">Experience</h2>
-          </div>
-          <div class="col-12">
-            <div class="border-left border-primary pt-2 pl-4 ml-2">
-              <div class="position-relative mb-4">
-                <i class="fa fa-arrow-right text-primary position-absolute" style="top: 3px; left: -24px"></i>
-                <h5 class="mb-1">Mobile App Developer</h5>
-                <p class="mb-2">
-                  I Apparel IGL, Cambodia | <small>Jul 2023 - Till now</small>
-                </p>
-                <p class="tags">
-                  <span>#ReactNative</span>
-                  <span>#JavaScript</span>
-                  <span>#AndroidStudio</span>
-                  <span>#Xcode</span>
-                  <span>#UI/UX</span>
-                  <span>#Firebase</span>
-                  <span>#Git</span>
-                  <span>#Next.js</span>
-                  <span>#Ajax</span>
-                  <span>#jQuery</span>
-                  <span>#HTML5</span>
-                  <span>#CSS</span>
-                  <span>#zustand</span>
-                  <span>#Redux.js</span>
-                  <span>#NoSql</span>
-                </p>
-              </div>
-              <div class="position-relative mb-4">
-                <i class="fa fa-arrow-right text-primary position-absolute" style="top: 3px; left: -24px"></i>
-                <h5 class="mb-1">Full Stack Developer</h5>
-                <p class="mb-2">
-                  Huminn (OPC) Pvt ltd, India | <small>2022 - Jul 2023</small>
-                </p>
-                <p class="tags">
-                  <span>#ReactNative</span>
-                  <span>#React</span>
-                  <span>#AndroidStudio</span>
-                  <span>#Firebase</span>
-                  <span>#Xcode</span>
-                  <span>#PHP</span>
-                  <span>#MySql</span>
-                  <span>#Ajax</span>
-                  <span>#jQuery</span>
-                  <span>#HTML5</span>
-                  <span>#CSS</span>
-                  <span>#RESTfulAPIs</span>
-                  <span>#Ionic</span>
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Education End -->
-    </div>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="#hero" aria-label="Aravind — home"><span class="brand-mark">A&gt;</span></a>
+    <nav class="tabs" aria-label="Primary">
+      <a href="#hero" class="tab active" data-tab="hero">README.md</a>
+      <a href="#projects" class="tab" data-tab="projects">projects.json</a>
+      <a href="#stack" class="tab" data-tab="stack">stack.yml</a>
+      <a href="#contact" class="tab" data-tab="contact">contact.sh</a>
+    </nav>
+    <a class="repo-btn" href="https://github.com/aravind3566" target="_blank" rel="noopener">★ 54</a>
   </div>
+</header>
 
-  <!-- Back to Top -->
-  <a href="#" class="back-to-top"><i class="fa fa-angle-double-up"></i></a>
+<main id="main">
 
-  <!-- JavaScript Libraries -->
-  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
-  <script src="lib/typed/typed.min.js"></script>
-  <script src="lib/easing/easing.min.js"></script>
-  <script src="lib/waypoints/waypoints.min.js"></script>
-  <script src="lib/owlcarousel/owl.carousel.min.js"></script>
-  <script src="lib/isotope/isotope.pkgd.min.js"></script>
-  <script src="lib/lightbox/js/lightbox.min.js"></script>
+  <section id="hero" class="hero">
+    <div class="hero-inner reveal">
+      <div class="gutter" aria-hidden="true">01<br>02<br>03<br>04<br>05<br>06<br>07<br>08</div>
+      <div class="hero-content">
+        <p class="eyebrow">// android developer · phnom penh, cambodia</p>
+        <h1>Hi, I'm <span class="grad-text">Aravind</span></h1>
+        <p class="role"><span class="prompt">&gt;</span><span id="typewriter"></span><span class="cursor" aria-hidden="true">▌</span></p>
+        <p class="bio">I build cross-platform apps with React Native — and when JavaScript hits a wall, I drop into Kotlin to write the native Android modules that get me past it.</p>
+        <ul class="badges" aria-label="GitHub stats">
+          <li><span class="badge-key">stars</span><span class="badge-val">54</span></li>
+          <li><span class="badge-key">repos</span><span class="badge-val">11</span></li>
+          <li><span class="badge-key">phnom penh</span><span class="badge-val" id="clock">--:--</span></li>
+        </ul>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="https://github.com/aravind3566" target="_blank" rel="noopener">View GitHub ↗</a>
+          <a class="btn btn-ghost" href="mailto:aravind3566@gmail.com">Say hello</a>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  <!-- Template Javascript -->
-  <script src="js/main.js"></script>
+  <section id="projects" class="section">
+    <span class="section-num">// projects.json</span>
+    <h2 class="section-title">Open source</h2>
+    <p class="section-sub">Native Android modules published for the React Native community.</p>
+
+    <div class="project-grid">
+      <article class="card reveal">
+        <span class="card-name">react-native-in-app-updates</span>
+        <p class="card-desc">A lightweight library for implementing Android in-app updates — keeps users on the latest version with minimal setup.</p>
+        <div class="card-meta"><span><span class="lang-dot"></span>Kotlin</span><span>★ 20</span><span>⑂ 5</span></div>
+        <a class="card-link" href="https://github.com/aravind3566/react-native-in-app-updates" target="_blank" rel="noopener">View repo ↗</a>
+      </article>
+
+      <article class="card reveal">
+        <span class="card-name">react-native-get-app-list</span>
+        <p class="card-desc">Retrieves the full list of installed apps on Android, including package names, display names, and version codes.</p>
+        <div class="card-meta"><span><span class="lang-dot"></span>Kotlin</span><span>★ 8</span><span>⑂ 2</span></div>
+        <a class="card-link" href="https://github.com/aravind3566/react-native-get-app-list" target="_blank" rel="noopener">View repo ↗</a>
+      </article>
+
+      <article class="card reveal">
+        <span class="card-name">react-native-install-unknown-apps</span>
+        <p class="card-desc">Manages and enables the "Install Unknown Apps" permission on Android — handy for apps that sideload APKs.</p>
+        <div class="card-meta"><span><span class="lang-dot"></span>Kotlin</span><span>★ 3</span></div>
+        <a class="card-link" href="https://github.com/aravind3566/react-native-install-unknown-apps" target="_blank" rel="noopener">View repo ↗</a>
+      </article>
+    </div>
+
+    <a class="link-more" href="https://github.com/aravind3566?tab=repositories" target="_blank" rel="noopener">View all 11 repositories →</a>
+  </section>
+
+  <section id="stack" class="section">
+    <span class="section-num">// stack.yml</span>
+    <h2 class="section-title">Toolbox</h2>
+    <p class="section-sub">What I reach for when a React Native app needs to do something the framework alone can't.</p>
+
+    <pre class="code-block reveal"><code><span class="tok-com">// the stack, honestly</span>
+<span class="tok-key">const</span> stack <span class="tok-punc">=</span> {
+  core<span class="tok-punc">:</span> [<span class="tok-str">'React Native'</span>, <span class="tok-str">'TypeScript'</span>, <span class="tok-str">'JavaScript'</span>, <span class="tok-str">'Expo'</span>]<span class="tok-punc">,</span>
+  state<span class="tok-punc">:</span> [<span class="tok-str">'Zustand'</span>, <span class="tok-str">'MMKV'</span>]<span class="tok-punc">,</span>
+  styling<span class="tok-punc">:</span> [<span class="tok-str">'NativeWind'</span>]<span class="tok-punc">,</span>
+  native<span class="tok-punc">:</span> [<span class="tok-str">'Kotlin'</span>, <span class="tok-str">'Android SDK'</span>, <span class="tok-str">'Gradle'</span>]<span class="tok-punc">,</span>
+  ship<span class="tok-punc">:</span> [<span class="tok-str">'EAS Build'</span>, <span class="tok-str">'Git'</span>]
+}<span class="tok-punc">;</span></code></pre>
+  </section>
+
+  <section id="achievements" class="section">
+    <span class="section-num">// achievements</span>
+    <h2 class="section-title">GitHub badges</h2>
+    <ul class="achv-grid">
+      <li class="achv"><span class="achv-icon">🏆</span><span><span class="achv-name">Starstruck</span><p class="achv-desc">A repo of mine picked up a serious number of stars.</p></span></li>
+      <li class="achv"><span class="achv-icon">🦈</span><span><span class="achv-name">Pull Shark ×2</span><p class="achv-desc">Pull requests merged, more than once.</p></span></li>
+      <li class="achv"><span class="achv-icon">🤝</span><span><span class="achv-name">Pair Extraordinaire</span><p class="achv-desc">Commits co-authored with someone else.</p></span></li>
+      <li class="achv"><span class="achv-icon">⚡</span><span><span class="achv-name">Quickdraw</span><p class="achv-desc">Closed an issue or PR within 5 minutes of opening it.</p></span></li>
+      <li class="achv"><span class="achv-icon">🎲</span><span><span class="achv-name">YOLO</span><p class="achv-desc">Merged a pull request without review. Once.</p></span></li>
+    </ul>
+  </section>
+
+  <section id="contact" class="section contact">
+    <span class="section-num">// contact.sh</span>
+    <h2 class="section-title">Let's talk</h2>
+    <p class="section-sub">Open to React Native / Android contract work and collaborating on open-source modules.</p>
+
+    <div class="terminal reveal">
+      <div class="term-line"><span class="prompt">$</span> open mailto:<a href="mailto:aravind3566@gmail.com">aravind3566@gmail.com</a><button class="copy-btn" type="button" data-copy="aravind3566@gmail.com">copy</button></div>
+      <div class="term-line"><span class="prompt">$</span> open <a href="https://www.linkedin.com/in/itsaravind" target="_blank" rel="noopener">linkedin.com/in/itsaravind</a></div>
+      <div class="term-line"><span class="prompt">$</span> open <a href="https://x.com/aravind3566" target="_blank" rel="noopener">x.com/aravind3566</a></div>
+      <div class="term-line"><span class="prompt">$</span> open <a href="https://github.com/aravind3566" target="_blank" rel="noopener">github.com/aravind3566</a></div>
+      <div class="term-line"><span class="prompt">$</span> open <a href="https://play.google.com/store/apps/dev?id=9079818920904162163" target="_blank" rel="noopener">Google Play — published apps</a></div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <p>Designed &amp; built by Aravind · <span id="year"></span></p>
+</footer>
+
+<script>
+(function(){
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Footer year
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Live Phnom Penh clock
+  function updateClock(){
+    try{
+      var fmt = new Intl.DateTimeFormat('en-GB', { timeZone:'Asia/Phnom_Penh', hour:'2-digit', minute:'2-digit' });
+      document.getElementById('clock').textContent = fmt.format(new Date());
+    }catch(e){ /* noop */ }
+  }
+  updateClock();
+  setInterval(updateClock, 30000);
+
+  // Typewriter roles
+  var roles = ['React Native Developer', 'Android Native Module Author', 'Open Source Maintainer'];
+  var el = document.getElementById('typewriter');
+
+  if(reduceMotion){
+    el.textContent = roles[0];
+  } else {
+    var ri = 0, ci = 0, deleting = false;
+    function tick(){
+      var word = roles[ri];
+      if(!deleting){
+        ci++;
+        el.textContent = word.slice(0, ci);
+        if(ci === word.length){ deleting = true; setTimeout(tick, 1600); return; }
+      } else {
+        ci--;
+        el.textContent = word.slice(0, ci);
+        if(ci === 0){ deleting = false; ri = (ri + 1) % roles.length; setTimeout(tick, 300); return; }
+      }
+      setTimeout(tick, deleting ? 35 : 65);
+    }
+    tick();
+  }
+
+  // Scroll reveal
+  var revealEls = document.querySelectorAll('.reveal');
+  if('IntersectionObserver' in window && !reduceMotion){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add('in-view');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    revealEls.forEach(function(elm){ io.observe(elm); });
+  } else {
+    revealEls.forEach(function(elm){ elm.classList.add('in-view'); });
+  }
+
+  // Scroll-spy tabs
+  var sections = ['hero','projects','stack','contact'].map(function(id){ return document.getElementById(id); });
+  var tabs = document.querySelectorAll('.tab');
+  if('IntersectionObserver' in window){
+    var spy = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          tabs.forEach(function(t){ t.classList.toggle('active', t.dataset.tab === entry.target.id); });
+        }
+      });
+    }, { rootMargin: '-40% 0px -55% 0px' });
+    sections.forEach(function(s){ if(s) spy.observe(s); });
+  }
+
+  // Copy email to clipboard
+  document.querySelectorAll('.copy-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var text = btn.getAttribute('data-copy');
+      var done = function(){ var old = btn.textContent; btn.textContent = 'copied!'; setTimeout(function(){ btn.textContent = old; }, 1500); };
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(text).then(done).catch(done);
+      } else {
+        done();
+      }
+    });
+  });
+})();
+</script>
+
 </body>
-
 </html>
