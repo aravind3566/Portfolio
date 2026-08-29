@@ -29,10 +29,31 @@
     --accent-orange:#f88909;
     --accent-cyan:#56d4dd;
     --accent-green:#3ddc84;
+    --topbar-bg: rgba(10,14,20,0.85);
+    /* fixed brand gradient — always paired with dark text, so it stays punchy in both themes */
+    --grad-solid: linear-gradient(120deg, #7f52ff, #f88909);
+    /* theme-adaptive gradient — used where the gradient itself IS the text, so it needs to
+       stay readable against --bg in both themes */
     --grad: linear-gradient(120deg, var(--accent-violet), var(--accent-orange));
     --mono: 'JetBrains Mono', ui-monospace, monospace;
     --sans: 'IBM Plex Sans', system-ui, sans-serif;
     --maxw: 920px;
+  }
+
+  [data-theme="light"]{
+    --bg:#f6f8fa;
+    --bg-panel:#ffffff;
+    --bg-panel-alt:#eef1f4;
+    --border:#d0d7de;
+    --border-soft:#e4e8ec;
+    --text:#1f2328;
+    --text-dim:#4b5563;
+    --text-faint:#8c98a4;
+    --accent-violet:#6639ba;
+    --accent-orange:#a15a00;
+    --accent-cyan:#0969da;
+    --accent-green:#1a7f37;
+    --topbar-bg: rgba(255,255,255,0.85);
   }
 
   *{box-sizing:border-box;}
@@ -77,7 +98,7 @@
   /* ---------- Topbar ---------- */
   .topbar{
     position:sticky; top:0; z-index:50;
-    background:rgba(10,14,20,0.85);
+    background:var(--topbar-bg);
     backdrop-filter:blur(10px);
     border-bottom:1px solid var(--border);
   }
@@ -88,7 +109,7 @@
   }
   .brand-mark{
     font-family:var(--mono); font-weight:800; font-size:1.1rem;
-    background:var(--grad); -webkit-background-clip:text; background-clip:text; color:transparent;
+    background:var(--grad-solid); -webkit-background-clip:text; background-clip:text; color:transparent;
   }
   .tabs{
     display:flex; gap:.25rem;
@@ -106,7 +127,7 @@
   .tab:hover{ color:var(--text); }
   .tab.active{
     color:var(--text);
-    border-image: var(--grad) 1;
+    border-image: var(--grad-solid) 1;
     border-bottom:2px solid;
     border-image-slice:1;
   }
@@ -118,6 +139,23 @@
   }
   .repo-btn:hover{ color:var(--text); border-color:var(--accent-violet); }
 
+  /* Theme switch, styled like a git diff hunk instead of a sun/moon slider:
+     the active theme reads as an added "+" line, the other as a removed "-" line. */
+  .theme-toggle{
+    display:flex; border:1px solid var(--border); border-radius:6px; overflow:hidden;
+    flex-shrink:0;
+  }
+  .diff-line{
+    font-family:var(--mono); font-size:.72rem; font-weight:700;
+    padding:.45rem .55rem; background:none; border:none; cursor:pointer;
+    color:var(--text-dim); white-space:nowrap;
+    transition:background .2s ease, color .2s ease;
+  }
+  .diff-line:not(:last-child){ border-right:1px solid var(--border); }
+  .diff-line:hover{ color:#f85149; }
+  .diff-line.is-active{ background:rgba(61,220,132,0.14); color:var(--accent-green); }
+  .diff-line.is-active:hover{ color:var(--accent-green); }
+
   main{ position:relative; z-index:1; }
 
   /* ---------- Reveal on scroll ---------- */
@@ -128,7 +166,7 @@
   }
 
   /* ---------- Hero ---------- */
-  .hero{ padding: clamp(2.5rem,6vw,5rem) 1.5rem 3rem; }
+  .hero{ position:relative; padding: clamp(2.5rem,6vw,5rem) 1.5rem 3rem; }
   .hero-inner{
     max-width:var(--maxw); margin:0 auto;
     display:grid; grid-template-columns:auto 1fr; gap:1.5rem;
@@ -136,6 +174,7 @@
     border:1px solid var(--border);
     border-radius:14px;
     padding: clamp(1.5rem,4vw,3rem);
+    position:relative; z-index:1;
   }
   .gutter{
     font-family:var(--mono); font-size:.78rem; color:var(--text-faint);
@@ -166,6 +205,38 @@
     max-width:56ch; color:var(--text); font-size:1.02rem; margin:0 0 1.6rem;
   }
 
+  /* ---------- Flanking Android/iOS illustrations ---------- */
+  .phone-decor{
+    position:absolute; top:50%; width:130px; z-index:0;
+    display:flex; flex-direction:column; align-items:center; gap:.6rem;
+    opacity:.85; pointer-events:none;
+    filter:drop-shadow(0 18px 34px rgba(0,0,0,.28));
+    animation:phone-float 7s ease-in-out infinite;
+    transform:translateY(-50%) rotate(var(--rot,0deg));
+  }
+  .phone-decor svg{ width:100%; height:auto; display:block; }
+  .phone-decor-left{ left:1.5vw; --rot:-4deg; }
+  .phone-decor-right{ right:1.5vw; --rot:4deg; animation-delay:.8s; }
+  .phone-label{
+    font-family:var(--mono); font-size:.68rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--text-faint);
+  }
+  .pd-bezel{ fill:var(--bg-panel); stroke:var(--border); stroke-width:2; }
+  .pd-notch{ fill:var(--bg); }
+  .pd-screen{ fill:var(--bg-panel-alt); }
+  .pd-dim{ fill:var(--border); }
+  .pd-faint{ fill:var(--text-faint); }
+  .pd-accent-green{ fill:var(--accent-green); opacity:.4; }
+  .pd-accent-cyan{ fill:var(--accent-cyan); opacity:.4; }
+
+  @keyframes phone-float{
+    0%,100%{ transform:translateY(-50%) rotate(var(--rot,0deg)); }
+    50%{ transform:translateY(calc(-50% - 12px)) rotate(var(--rot,0deg)); }
+  }
+  @media (max-width:1360px){
+    .phone-decor{ display:none; }
+  }
+
   .badges{
     list-style:none; display:flex; flex-wrap:wrap; gap:.6rem;
     padding:0; margin:0 0 1.8rem;
@@ -175,7 +246,7 @@
     font-family:var(--mono); font-size:.78rem;
   }
   .badge-key{ background:var(--bg-panel-alt); color:var(--text-dim); padding:.35rem .6rem; }
-  .badge-val{ background:#161d29; color:var(--text); padding:.35rem .6rem; font-weight:600; }
+  .badge-val{ background:var(--grad-solid); color:#0a0e14; padding:.35rem .6rem; font-weight:700; }
 
   .cta-row{ display:flex; flex-wrap:wrap; gap:.9rem; }
   .btn{
@@ -185,7 +256,7 @@
     display:inline-block;
   }
   .btn:hover{ transform:translateY(-2px); }
-  .btn-primary{ background:var(--grad); color:#0a0e14; }
+  .btn-primary{ background:var(--grad-solid); color:#0a0e14; }
   .btn-primary:hover{ opacity:.92; }
   .btn-ghost{ border-color:var(--border); color:var(--text); }
   .btn-ghost:hover{ border-color:var(--accent-cyan); }
@@ -223,6 +294,38 @@
     display:inline-block; margin-top:1.8rem; font-family:var(--mono); font-size:.9rem; color:var(--accent-orange);
   }
   .link-more:hover{ text-decoration:underline; }
+
+  /* ---------- Google Play apps ---------- */
+  .app-featured{
+    display:flex; gap:1.4rem; align-items:flex-start; flex-wrap:wrap;
+    background:var(--bg-panel); border:1px solid var(--border); border-radius:14px;
+    padding:1.6rem; margin-bottom:1.3rem;
+    transition:transform .2s ease, border-color .2s ease;
+  }
+  .app-featured:hover{ transform:translateY(-4px); border-color:var(--accent-violet); }
+  .app-icon{
+    width:72px; height:72px; border-radius:16px; object-fit:cover;
+    flex-shrink:0; border:1px solid var(--border);
+  }
+  .app-info{ flex:1; min-width:220px; }
+  .app-featured-tag{
+    display:inline-block; font-family:var(--mono); font-size:.72rem; font-weight:700;
+    color:var(--accent-green); border:1px solid var(--border); border-radius:5px;
+    padding:.15rem .5rem; margin-bottom:.7rem;
+  }
+  .app-name{ font-family:var(--mono); font-weight:600; font-size:1.05rem; margin:0 0 .55rem; }
+  .app-desc{ color:var(--text-dim); font-size:.92rem; margin:0 0 .9rem; max-width:52ch; }
+  .app-meta{
+    display:flex; flex-wrap:wrap; gap:.9rem;
+    font-family:var(--mono); font-size:.76rem; color:var(--text-faint);
+    margin-bottom:1.2rem;
+  }
+  .app-more{
+    display:flex; flex-direction:column; gap:.55rem;
+    font-family:var(--mono); font-size:.86rem; margin-bottom:.4rem;
+  }
+  .app-more a{ color:var(--accent-cyan); }
+  .app-more a:hover{ text-decoration:underline; }
 
   /* ---------- Code block (stack) ---------- */
   .code-block{
@@ -275,6 +378,11 @@
     font-family:var(--mono); font-size:.8rem; color:var(--text-faint);
   }
 
+  .visually-hidden{
+    position:absolute; width:1px; height:1px; margin:-1px; padding:0;
+    overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
+  }
+
   @media (max-width:640px){
     .hero-inner{ grid-template-columns:1fr; }
     .gutter{ display:none; }
@@ -293,16 +401,51 @@
     <nav class="tabs" aria-label="Primary">
       <a href="#hero" class="tab active" data-tab="hero">README.md</a>
       <a href="#projects" class="tab" data-tab="projects">projects.json</a>
+      <a href="#apps" class="tab" data-tab="apps">apps.json</a>
       <a href="#stack" class="tab" data-tab="stack">stack.yml</a>
       <a href="#contact" class="tab" data-tab="contact">contact.sh</a>
     </nav>
-    <a class="repo-btn" href="https://github.com/aravind3566" target="_blank" rel="noopener">★ 54</a>
+    <a class="repo-btn" id="stat-repobtn" href="https://github.com/aravind3566" target="_blank" rel="noopener">★ 54+</a>
+    <div class="theme-toggle" role="group" aria-label="Theme">
+      <button class="diff-line is-active" type="button" data-theme="dark" aria-pressed="true">+ dark</button>
+      <button class="diff-line" type="button" data-theme="light" aria-pressed="false">- light</button>
+    </div>
   </div>
 </header>
 
 <main id="main">
 
   <section id="hero" class="hero">
+    <div class="phone-decor phone-decor-left" aria-hidden="true">
+      <svg viewBox="0 0 140 300" focusable="false">
+        <rect class="pd-bezel" x="4" y="4" width="132" height="292" rx="26"/>
+        <circle class="pd-dim" cx="70" cy="20" r="4"/>
+        <rect class="pd-screen" x="16" y="36" width="108" height="240" rx="10"/>
+        <rect class="pd-faint" x="26" y="50" width="56" height="6" rx="3"/>
+        <rect class="pd-dim" x="26" y="70" width="88" height="34" rx="8"/>
+        <rect class="pd-accent-green" x="26" y="112" width="88" height="34" rx="8"/>
+        <rect class="pd-dim" x="26" y="154" width="88" height="34" rx="8"/>
+        <rect class="pd-dim" x="26" y="196" width="88" height="34" rx="8"/>
+        <rect class="pd-faint" x="55" y="266" width="30" height="4" rx="2"/>
+      </svg>
+      <span class="phone-label">Android</span>
+    </div>
+
+    <div class="phone-decor phone-decor-right" aria-hidden="true">
+      <svg viewBox="0 0 140 300" focusable="false">
+        <rect class="pd-bezel" x="4" y="4" width="132" height="292" rx="34"/>
+        <rect class="pd-notch" x="52" y="16" width="36" height="10" rx="5"/>
+        <rect class="pd-screen" x="16" y="34" width="108" height="242" rx="14"/>
+        <rect class="pd-dim" x="26" y="48" width="88" height="16" rx="8"/>
+        <rect class="pd-accent-cyan" x="26" y="76" width="88" height="30" rx="8"/>
+        <rect class="pd-dim" x="26" y="114" width="88" height="30" rx="8"/>
+        <rect class="pd-dim" x="26" y="152" width="88" height="30" rx="8"/>
+        <rect class="pd-dim" x="26" y="190" width="88" height="30" rx="8"/>
+        <rect class="pd-faint" x="50" y="266" width="40" height="4" rx="2"/>
+      </svg>
+      <span class="phone-label">iOS</span>
+    </div>
+
     <div class="hero-inner reveal">
       <div class="gutter" aria-hidden="true">01<br>02<br>03<br>04<br>05<br>06<br>07<br>08</div>
       <div class="hero-content">
@@ -311,14 +454,15 @@
         <p class="role"><span class="prompt">&gt;</span><span id="typewriter"></span><span class="cursor" aria-hidden="true">▌</span></p>
         <p class="bio">I build cross-platform apps with React Native — and when JavaScript hits a wall, I drop into Kotlin to write the native Android modules that get me past it.</p>
         <ul class="badges" aria-label="GitHub stats">
-          <li><span class="badge-key">stars</span><span class="badge-val">54</span></li>
-          <li><span class="badge-key">repos</span><span class="badge-val">11</span></li>
+          <li><span class="badge-key">stars</span><span class="badge-val" id="stat-stars">54+</span></li>
+          <li><span class="badge-key">repos</span><span class="badge-val" id="stat-repos">11+</span></li>
           <li><span class="badge-key">phnom penh</span><span class="badge-val" id="clock">--:--</span></li>
         </ul>
         <div class="cta-row">
           <a class="btn btn-primary" href="https://github.com/aravind3566" target="_blank" rel="noopener">View GitHub ↗</a>
-          <a class="btn btn-ghost" href="mailto:aravind3566@gmail.com">Say hello</a>
+          <a class="btn btn-ghost" href="https://www.linkedin.com/in/itsaravind" target="_blank" rel="noopener">Say hello</a>
         </div>
+        <p id="copy-announce" class="visually-hidden" role="status" aria-live="polite"></p>
       </div>
     </div>
   </section>
@@ -332,26 +476,53 @@
       <article class="card reveal">
         <span class="card-name">react-native-in-app-updates</span>
         <p class="card-desc">A lightweight library for implementing Android in-app updates — keeps users on the latest version with minimal setup.</p>
-        <div class="card-meta"><span><span class="lang-dot"></span>Kotlin</span><span>★ 20</span><span>⑂ 5</span></div>
+        <div class="card-meta"><span><span class="lang-dot"></span>Kotlin</span><span id="stat-repo1-stars">★ 20+</span><span id="stat-repo1-forks">⑂ 5+</span></div>
         <a class="card-link" href="https://github.com/aravind3566/react-native-in-app-updates" target="_blank" rel="noopener">View repo ↗</a>
       </article>
 
       <article class="card reveal">
         <span class="card-name">react-native-get-app-list</span>
         <p class="card-desc">Retrieves the full list of installed apps on Android, including package names, display names, and version codes.</p>
-        <div class="card-meta"><span><span class="lang-dot"></span>Kotlin</span><span>★ 8</span><span>⑂ 2</span></div>
+        <div class="card-meta"><span><span class="lang-dot"></span>Kotlin</span><span id="stat-repo2-stars">★ 8+</span><span id="stat-repo2-forks">⑂ 2+</span></div>
         <a class="card-link" href="https://github.com/aravind3566/react-native-get-app-list" target="_blank" rel="noopener">View repo ↗</a>
       </article>
 
       <article class="card reveal">
         <span class="card-name">react-native-install-unknown-apps</span>
         <p class="card-desc">Manages and enables the "Install Unknown Apps" permission on Android — handy for apps that sideload APKs.</p>
-        <div class="card-meta"><span><span class="lang-dot"></span>Kotlin</span><span>★ 3</span></div>
+        <div class="card-meta"><span><span class="lang-dot"></span>Kotlin</span><span id="stat-repo3-stars">★ 3+</span></div>
         <a class="card-link" href="https://github.com/aravind3566/react-native-install-unknown-apps" target="_blank" rel="noopener">View repo ↗</a>
       </article>
     </div>
 
     <a class="link-more" href="https://github.com/aravind3566?tab=repositories" target="_blank" rel="noopener">View all 11 repositories →</a>
+  </section>
+
+  <section id="apps" class="section">
+    <span class="section-num">// apps.json</span>
+    <h2 class="section-title">Shipped on Google Play</h2>
+    <p class="section-sub">Small, focused Android utilities, published under the developer name "A Devs".</p>
+
+    <div class="app-featured reveal">
+      <img class="app-icon" src="https://play-lh.googleusercontent.com/fDV76I6VhdoPZki9WNWYNnehmw9fR2aYAklxDfpmPAP_WyrznPW1LqNsAFd5lphUVHJIM6JFHflISYtr2CJZhrI=w240-h480" alt="" loading="lazy" width="72" height="72">
+      <div class="app-info">
+        <span class="app-featured-tag">Featured</span>
+        <h3 class="app-name">Vin Decoder 2026 Pro</h3>
+        <p class="app-desc">Enter any vehicle's VIN and pull its make, model, year, and engine details. Built for Android, ad-free, and it doesn't collect user data.</p>
+        <div class="app-meta">
+          <span>Auto &amp; Vehicles</span><span>500+ downloads</span><span>No data collected</span>
+        </div>
+        <a class="btn btn-primary" href="https://play.google.com/store/apps/details?id=com.vin_decode_pro" target="_blank" rel="noopener">View on Google Play ↗</a>
+      </div>
+    </div>
+
+    <div class="app-more reveal">
+      <a href="https://play.google.com/store/apps/details?id=com.aravind.flashlight" target="_blank" rel="noopener">Flashlight Pro ↗</a>
+      <a href="https://play.google.com/store/apps/details?id=com.postalinfo" target="_blank" rel="noopener">Pin Code Search with Location ↗</a>
+      <a href="https://play.google.com/store/apps/details?id=com.ifscfinder" target="_blank" rel="noopener">IFSC Code — All India Bank ↗</a>
+    </div>
+
+    <a class="link-more" href="https://play.google.com/store/apps/dev?id=9079818920904162163" target="_blank" rel="noopener">All apps on Google Play →</a>
   </section>
 
   <section id="stack" class="section">
@@ -391,7 +562,6 @@
       <div class="term-line"><span class="prompt">$</span> open <a href="https://www.linkedin.com/in/itsaravind" target="_blank" rel="noopener">linkedin.com/in/itsaravind</a></div>
       <div class="term-line"><span class="prompt">$</span> open <a href="https://x.com/aravind3566" target="_blank" rel="noopener">x.com/aravind3566</a></div>
       <div class="term-line"><span class="prompt">$</span> open <a href="https://github.com/aravind3566" target="_blank" rel="noopener">github.com/aravind3566</a></div>
-      <div class="term-line"><span class="prompt">$</span> open <a href="https://play.google.com/store/apps/dev?id=9079818920904162163" target="_blank" rel="noopener">Google Play — published apps</a></div>
     </div>
   </section>
 
@@ -405,6 +575,36 @@
 (function(){
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  // Theme: dark/light via a git-diff-styled toggle instead of a typical switch
+  var root = document.documentElement;
+  var themeButtons = document.querySelectorAll('.diff-line');
+
+  function applyTheme(theme){
+    root.setAttribute('data-theme', theme);
+    themeButtons.forEach(function(btn){
+      var isActive = btn.dataset.theme === theme;
+      btn.classList.toggle('is-active', isActive);
+      btn.setAttribute('aria-pressed', String(isActive));
+      btn.textContent = (isActive ? '+ ' : '- ') + btn.dataset.theme;
+    });
+    try{ localStorage.setItem('site-theme', theme); }catch(e){ /* sandboxed preview, ignore */ }
+  }
+
+  var initialTheme = 'dark';
+  try{
+    var stored = localStorage.getItem('site-theme');
+    if(stored === 'dark' || stored === 'light'){
+      initialTheme = stored;
+    } else if(window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches){
+      initialTheme = 'light';
+    }
+  }catch(e){ /* sandboxed preview, ignore */ }
+  applyTheme(initialTheme);
+
+  themeButtons.forEach(function(btn){
+    btn.addEventListener('click', function(){ applyTheme(btn.dataset.theme); });
+  });
+
   // Footer year
   document.getElementById('year').textContent = new Date().getFullYear();
 
@@ -417,6 +617,48 @@
   }
   updateClock();
   setInterval(updateClock, 30000);
+
+  // Live GitHub stats: tries to fetch real star/fork/repo counts from the public API
+  // and upgrade the numbers in place. If it fails (rate-limited, offline, or blocked
+  // in a sandboxed preview) it just leaves the static "N+" numbers already in the markup.
+  (function(){
+    var repoMap = {
+      'react-native-in-app-updates': { stars: 'stat-repo1-stars', forks: 'stat-repo1-forks' },
+      'react-native-get-app-list': { stars: 'stat-repo2-stars', forks: 'stat-repo2-forks' },
+      'react-native-install-unknown-apps': { stars: 'stat-repo3-stars' }
+    };
+
+    fetch('https://api.github.com/users/aravind3566/repos?per_page=100')
+      .then(function(res){ if(!res.ok) throw new Error('bad response'); return res.json(); })
+      .then(function(repos){
+        if(!Array.isArray(repos)) return;
+
+        var totalStars = 0;
+        repos.forEach(function(repo){
+          totalStars += repo.stargazers_count || 0;
+          var ids = repoMap[repo.name];
+          if(!ids) return;
+          if(ids.stars){
+            var starEl = document.getElementById(ids.stars);
+            if(starEl) starEl.textContent = '★ ' + repo.stargazers_count;
+          }
+          if(ids.forks){
+            var forkEl = document.getElementById(ids.forks);
+            if(forkEl) forkEl.textContent = '⑂ ' + repo.forks_count;
+          }
+        });
+
+        var starsBadge = document.getElementById('stat-stars');
+        if(starsBadge) starsBadge.textContent = totalStars;
+
+        var reposBadge = document.getElementById('stat-repos');
+        if(reposBadge) reposBadge.textContent = repos.length;
+
+        var repoBtn = document.getElementById('stat-repobtn');
+        if(repoBtn) repoBtn.textContent = '★ ' + totalStars;
+      })
+      .catch(function(){ /* keep the static "+" numbers already in the markup */ });
+  })();
 
   // Typewriter roles
   var roles = ['React Native Developer', 'Android Native Module Author', 'Open Source Maintainer'];
@@ -459,7 +701,7 @@
   }
 
   // Scroll-spy tabs
-  var sections = ['hero','projects','stack','contact'].map(function(id){ return document.getElementById(id); });
+  var sections = ['hero','projects','apps','stack','contact'].map(function(id){ return document.getElementById(id); });
   var tabs = document.querySelectorAll('.tab');
   if('IntersectionObserver' in window){
     var spy = new IntersectionObserver(function(entries){
@@ -472,18 +714,44 @@
     sections.forEach(function(s){ if(s) spy.observe(s); });
   }
 
-  // Copy email to clipboard
+  // Shared clipboard helper, with a fallback for browsers without the Clipboard API
+  function copyText(text){
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      return navigator.clipboard.writeText(text);
+    }
+    return new Promise(function(resolve, reject){
+      try{
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.focus(); ta.select();
+        var ok = document.execCommand('copy');
+        document.body.removeChild(ta);
+        ok ? resolve() : reject(new Error('copy failed'));
+      }catch(e){ reject(e); }
+    });
+  }
+
+  var announce = document.getElementById('copy-announce');
+
+  // Copy email to clipboard (small copy buttons)
   document.querySelectorAll('.copy-btn').forEach(function(btn){
     btn.addEventListener('click', function(){
       var text = btn.getAttribute('data-copy');
-      var done = function(){ var old = btn.textContent; btn.textContent = 'copied!'; setTimeout(function(){ btn.textContent = old; }, 1500); };
-      if(navigator.clipboard && navigator.clipboard.writeText){
-        navigator.clipboard.writeText(text).then(done).catch(done);
-      } else {
-        done();
-      }
+      copyText(text).then(function(){
+        var old = btn.textContent;
+        btn.textContent = 'copied!';
+        if(announce) announce.textContent = 'Email copied to clipboard';
+        setTimeout(function(){ btn.textContent = old; }, 1500);
+      }).catch(function(){
+        btn.textContent = 'try again';
+        setTimeout(function(){ btn.textContent = 'copy'; }, 1500);
+      });
     });
   });
+
 })();
 </script>
 
