@@ -251,6 +251,30 @@
   .game-play.theme-android #game-duck{ border-color:#3DDC84; color:#3DDC84; }
   .game-play.theme-ios #game-jump{ background:#007AFF; color:#ffffff; }
   .game-play.theme-ios #game-duck{ border-color:#007AFF; color:#007AFF; }
+
+  .platform-icon{
+    width:1.1em; height:1.1em;
+    display:inline-block; flex:none;
+    vertical-align:-0.16em;
+    margin-right:.5em;
+  }
+  .platform-icon svg{ width:100%; height:100%; }
+  .btn-android .platform-icon{ color:#0a1f14; }
+  .btn-ios .platform-icon{ color:#fff; }
+  .btn-android, .btn-ios{
+    display:inline-flex; align-items:center; justify-content:center;
+    gap:.1rem;
+  }
+
+  .btn-android .platform-icon svg *{ vector-effect:non-scaling-stroke; }
+  .btn-ios .platform-icon svg *{ vector-effect:non-scaling-stroke; }
+
+  .btn-android .platform-icon svg{ fill:currentColor; stroke:currentColor; }
+  .btn-ios .platform-icon svg{ fill:currentColor; stroke:currentColor; }
+
+  .btn-android .platform-icon .android-eye{ fill:#3DDC84; stroke:none; }
+  .btn-ios .platform-icon .apple-leaf{ fill:currentColor; stroke:none; }
+
   .btn-ghost:hover{ border-color:var(--accent-cyan); }
 
   /* ---------- Sections ---------- */
@@ -321,7 +345,7 @@
     gap:1.1rem; margin-bottom:1.3rem;
   }
   .app-featured{
-    display:flex; gap:1.4rem; align-items:flex-start; flex-wrap:wrap;
+    display:flex; gap:1.4rem; align-items:stretch; flex-wrap:wrap;
     background:var(--bg-panel); border:1px solid var(--border); border-radius:14px;
     padding:1.6rem;
     transition:transform .2s ease, border-color .2s ease;
@@ -331,18 +355,39 @@
     width:72px; height:72px; border-radius:16px; object-fit:cover;
     flex-shrink:0; border:1px solid var(--border);
   }
-  .app-info{ flex:1; min-width:220px; }
+  .app-info{
+    flex:1; min-width:220px;
+    display:grid;
+    grid-template-rows:auto auto 1fr auto auto;
+    min-height:100%;
+  }
   .app-featured-tag{
-    display:inline-block; font-family:var(--mono); font-size:.72rem; font-weight:700;
+    display:inline-flex; align-items:center; justify-content:flex-start;
+    width:max-content;
+    font-family:var(--mono); font-size:.72rem; font-weight:700;
     color:var(--accent-green); border:1px solid var(--border); border-radius:5px;
     padding:.15rem .5rem; margin-bottom:.7rem;
+    min-height:28px;
   }
-  .app-name{ font-family:var(--mono); font-weight:600; font-size:1.05rem; margin:0 0 .55rem; }
-  .app-desc{ color:var(--text-dim); font-size:.92rem; margin:0 0 .9rem; max-width:52ch; }
+  .app-featured-tag.placeholder{
+    visibility:hidden;
+  }
+  .app-name{
+    font-family:var(--mono); font-weight:600; font-size:1.05rem;
+    margin:0 0 .55rem; min-height:1.7em;
+  }
+  .app-desc{
+    color:var(--text-dim); font-size:.92rem; margin:0 0 .9rem; max-width:52ch;
+    min-height:7.2em;
+  }
   .app-meta{
-    display:flex; flex-wrap:wrap; gap:.9rem;
+    display:flex; flex-wrap:wrap; align-content:flex-start; gap:.9rem;
     font-family:var(--mono); font-size:.76rem; color:var(--text-faint);
-    margin-bottom:1.2rem;
+    min-height:3.1em; margin-bottom:1.2rem;
+  }
+  .app-info > .btn{
+    display:flex; align-items:center; justify-content:center;
+    width:100%; min-height:52px;
   }
   .app-more{
     display:flex; flex-direction:column; gap:.55rem;
@@ -350,6 +395,13 @@
   }
   .app-more a{ color:var(--accent-cyan); }
   .app-more a:hover{ text-decoration:underline; }
+
+  @media (max-width:640px){
+    .app-featured{ align-items:flex-start; }
+    .app-info{ min-height:0; }
+    .app-desc{ min-height:0; }
+    .app-meta{ min-height:0; }
+  }
 
   /* ---------- Code block (stack) ---------- */
   .code-block{
@@ -474,6 +526,7 @@
     display:flex; align-items:center; justify-content:center;
     background:rgba(255,255,255,.45);
   }
+  .runner-overlay[hidden]{ display:none !important; }
   .runner-restart{
     width:54px; height:54px; border-radius:50%;
     background:var(--grad-solid); border:none; cursor:pointer;
@@ -485,19 +538,44 @@
 
   .runner-bg{ position:absolute; inset:0; overflow:hidden; pointer-events:none; }
   .runner-cloud{
-    position:absolute; top:16px; width:26px; height:9px; border-radius:6px;
-    background:#c3cbd6; opacity:.8;
-    animation:runner-cloud-drift 9s linear infinite;
+    position:absolute; left:0; top:16px; width:150px; height:42px;
+    border-radius:999px;
+    background:
+      radial-gradient(ellipse at 22% 64%, rgba(255,255,255,.98) 0 18%, transparent 19%),
+      radial-gradient(ellipse at 43% 42%, rgba(255,255,255,.96) 0 24%, transparent 25%),
+      radial-gradient(ellipse at 63% 34%, rgba(255,255,255,.94) 0 29%, transparent 30%),
+      radial-gradient(ellipse at 81% 61%, rgba(255,255,255,.9) 0 20%, transparent 21%),
+      linear-gradient(to bottom, rgba(255,255,255,.93), rgba(211,220,230,.7));
+    filter:blur(.4px);
+    box-shadow:0 6px 14px rgba(110,130,155,.13);
+    opacity:.68;
+    animation:runner-cloud-drift 26s linear infinite;
+    will-change:transform;
   }
-  .runner-cloud.c2{ top:34px; opacity:.4; animation-delay:4.5s; }
-  .runner-cloud.c3{ top:8px; width:18px; height:7px; opacity:.35; animation-duration:12s; animation-delay:7.5s; }
-  .gp-body{ fill:#eef1f5; stroke:#aab3c2; stroke-width:1.5; }
-  .gp-limb{ fill:#aab3c2; }
+  .runner-cloud::after{
+    content:""; position:absolute; left:8px; right:8px; bottom:1px; height:12px;
+    border-radius:999px;
+    background:linear-gradient(to bottom, rgba(240,244,248,.78), rgba(190,202,215,.42));
+    filter:blur(2.5px);
+  }
+  .runner-cloud.c2{ top:46px; width:165px; height:45px; opacity:.58; animation-duration:29s; animation-delay:-7s; }
+  .runner-cloud.c3{ top:9px; width:132px; height:37px; opacity:.5; animation-duration:31s; animation-delay:-14s; }
+  .runner-cloud.c4{ top:72px; width:180px; height:48px; opacity:.48; animation-duration:34s; animation-delay:-21s; }
+  .runner-cloud.c5{ top:105px; width:145px; height:40px; opacity:.4; animation-duration:30s; animation-delay:-10s; }
+  .runner-cloud.c6{ top:132px; width:172px; height:46px; opacity:.34; animation-duration:36s; animation-delay:-25s; }
+  .runner-cloud.c7{ top:164px; width:125px; height:35px; opacity:.28; animation-duration:32s; animation-delay:-17s; }
+  .runner-cloud.c8{ top:24px; width:155px; height:43px; opacity:.42; animation-duration:37s; animation-delay:-30s; }
+  .runner-cloud.c9{ top:92px; width:190px; height:50px; opacity:.24; animation-duration:40s; animation-delay:-33s; }
+  .runner-cloud.c10{ top:56px; width:115px; height:33px; opacity:.32; animation-duration:28s; animation-delay:-19s; }
+  .runner-cloud.c11{ top:121px; width:140px; height:39px; opacity:.26; animation-duration:35s; animation-delay:-5s; }
+  .runner-cloud.c12{ top:190px; width:165px; height:44px; opacity:.18; animation-duration:42s; animation-delay:-27s; }
   @keyframes runner-cloud-drift{
-    from{ transform:translateX(360px); }
-    to{ transform:translateX(-60px); }
+    from{ transform:translateX(calc(100vw + 40px)); }
+    to{ transform:translateX(-220px); }
   }
 
+  .gp-body{ fill:#eef1f5; stroke:#aab3c2; stroke-width:1.5; }
+  .gp-limb{ fill:#aab3c2; }
   .runner.raining{ filter:brightness(.9); }
   .runner-rain{
     position:absolute; inset:0; overflow:hidden; pointer-events:none;
@@ -518,6 +596,67 @@
   @keyframes rain-fall{
     from{ transform:translateY(0); }
     to{ transform:translateY(150px); }
+  }
+
+  .runner-lightning-flash{
+    position:absolute; inset:0;
+    background:#fff;
+    opacity:0;
+    pointer-events:none;
+  }
+  .runner.raining .runner-lightning-flash{
+    animation:runner-thunder-flash 5.5s linear infinite;
+  }
+  .runner-thunder-bolt{
+    position:absolute;
+    top:10px;
+    left:68%;
+    font-size:2.4rem;
+    line-height:1;
+    color:#ffd84d;
+    text-shadow:0 0 10px rgba(255,216,77,.9), 0 0 22px rgba(255,255,255,.8);
+    opacity:0;
+    transform:translateY(-5px) scale(.85);
+    pointer-events:none;
+  }
+  .runner.raining .runner-thunder-bolt{
+    animation:runner-thunder-bolt 5.5s linear infinite;
+  }
+  .runner.raining .runner-world{
+    animation:runner-rain-shake 5.5s linear infinite;
+  }
+  @keyframes runner-thunder-flash{
+    0%, 88%, 91%, 94%, 100%{ opacity:0; }
+    89%{ opacity:.7; }
+    90%{ opacity:.1; }
+    92%{ opacity:.85; }
+    93%{ opacity:0; }
+  }
+  @keyframes runner-thunder-bolt{
+    0%, 87%, 100%{ opacity:0; transform:translateY(-5px) scale(.85) rotate(-3deg); }
+    89%{ opacity:1; transform:translateY(0) scale(1) rotate(1deg); }
+    91%{ opacity:.95; transform:translateY(0) scale(1.03) rotate(0deg); }
+    93%{ opacity:0; transform:translateY(3px) scale(.92) rotate(2deg); }
+  }
+  @keyframes runner-rain-shake{
+    0%, 87%, 94%, 100%{ transform:translate(0,0); }
+    89.2%{ transform:translate(-1px,1px); }
+    90%{ transform:translate(1px,-1px); }
+    91%{ transform:translate(-.5px,.5px); }
+  }
+
+  #game-duck{
+    transition:transform .08s ease, opacity .15s ease, border-color .15s ease, background .15s ease;
+  }
+  #game-duck.is-pressed{
+    transform:translateY(2px) scale(.96);
+    background:rgba(127,82,255,.12);
+  }
+  .game-play.theme-android #game-duck.is-pressed{
+    background:rgba(61,220,132,.16);
+  }
+  .game-play.theme-ios #game-duck.is-pressed{
+    background:rgba(0,122,255,.14);
   }
 
   .runner-ground{
@@ -888,6 +1027,7 @@
       <div class="app-featured reveal">
         <img class="app-icon" src="https://play-lh.googleusercontent.com/IQ9r4tpcfrrhn4vCApCAIHi9DVn3YV_sKx-ULtpG9CWjdmxZCYUvWw6N_GyPmIy0WQgqFL-o_AF8VE_ltdeTHQ=w240-h480" alt="" loading="lazy" width="72" height="72">
         <div class="app-info">
+          <span class="app-featured-tag placeholder" aria-hidden="true">Featured</span>
           <h3 class="app-name">Flashlight Pro</h3>
           <p class="app-desc">A flashlight built for the wrist — vibrant color options and customizable settings for Wear OS smartwatches.</p>
           <div class="app-meta">
@@ -944,8 +1084,26 @@
       <div class="game-platform-select" id="game-platform-select">
         <p class="game-prompt">Choose your platform</p>
         <div class="game-buttons">
-          <button class="btn btn-android game-btn" id="game-pick-android" type="button">Android</button>
-          <button class="btn btn-ios game-btn" id="game-pick-ios" type="button">iOS</button>
+          <button class="btn btn-android game-btn" id="game-pick-android" type="button">
+            <span class="platform-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" role="img">
+                <path d="M8.2 7.1 6.7 4.8a.7.7 0 0 1 1.1-.8l1.5 2.2a7.6 7.6 0 0 1 5.4 0l1.5-2.2a.7.7 0 1 1 1.1.8l-1.5 2.3A6.9 6.9 0 0 1 20 13.1v5.1a1 1 0 0 1-1 1h-2v-5.6h-1.2v5.6h-7.6v-5.6H7v5.6H5a1 1 0 0 1-1-1v-5.1a6.9 6.9 0 0 1 4.2-6Zm-1 2.8a.9.9 0 1 0 0-1.8.9.9 0 0 0 0 1.8Zm9.6 0a.9.9 0 1 0 0-1.8.9.9 0 0 0 0 1.8Z"/>
+                <circle class="android-eye" cx="9" cy="9" r=".8"/>
+                <circle class="android-eye" cx="15" cy="9" r=".8"/>
+              </svg>
+            </span>
+            Android
+          </button>
+          <button class="btn btn-ios game-btn" id="game-pick-ios" type="button">
+            <span class="platform-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" role="img">
+                <path d="M16.9 12.7c0-2 1.6-3 1.7-3.1-.9-1.4-2.3-1.6-2.8-1.6-1.2-.1-2.3.7-2.9.7-.6 0-1.5-.7-2.5-.7-1.3 0-2.5.8-3.2 1.9-1.4 2.3-.4 5.7 1 7.6.7.9 1.5 1.9 2.6 1.9 1 0 1.4-.6 2.7-.6 1.3 0 1.6.6 2.7.6s1.8-.9 2.5-1.9c.8-1.1 1.1-2.2 1.1-2.2s-2.9-1.1-2.9-2.6Z"/>
+                <path d="M15.1 6.8c.6-.7 1-1.7.9-2.7-.9 0-2 .6-2.6 1.3-.6.7-1 1.6-.9 2.6 1 .1 2-.5 2.6-1.2Z"/>
+                <path class="apple-leaf" d="M14.1 4.3c.5-.6.8-1.3.8-2.1-.7 0-1.5.4-2 .9-.4.5-.8 1.3-.7 2 .8.1 1.5-.3 1.9-.8Z"/>
+              </svg>
+            </span>
+            iOS
+          </button>
         </div>
       </div>
 
@@ -962,6 +1120,15 @@
               <span class="runner-cloud c1"></span>
               <span class="runner-cloud c2"></span>
               <span class="runner-cloud c3"></span>
+              <span class="runner-cloud c4"></span>
+              <span class="runner-cloud c5"></span>
+              <span class="runner-cloud c6"></span>
+              <span class="runner-cloud c7"></span>
+              <span class="runner-cloud c8"></span>
+              <span class="runner-cloud c9"></span>
+              <span class="runner-cloud c10"></span>
+              <span class="runner-cloud c11"></span>
+              <span class="runner-cloud c12"></span>
             </div>
             <div class="runner-rain" aria-hidden="true">
               <span class="rain-drop"></span>
@@ -970,6 +1137,8 @@
               <span class="rain-drop"></span>
               <span class="rain-drop"></span>
               <span class="rain-drop"></span>
+              <span class="runner-lightning-flash"></span>
+              <span class="runner-thunder-bolt">&#9889;</span>
             </div>
             <div class="runner-ground"></div>
             <div class="runner-player" id="runner-player"></div>
@@ -1294,8 +1463,10 @@
     var isJumping = false;
     var isDucking = false;
     var awaitingRestart = false;
+    var replyVisible = false;
     var raining = false;
     var rainRoundsLeft = 0;
+    var rainCooldown = 0;
 
     try{ best = parseInt(localStorage.getItem('platform-jump-best'), 10) || 0; }catch(e){ /* ignore */ }
     bestEl.textContent = best;
@@ -1305,7 +1476,6 @@
     }
 
     var lastObstacleEmoji = null;
-
     function pickObstacle(pool){
       if(pool.length === 1) return pool[0];
       var choice;
@@ -1313,21 +1483,54 @@
       return choice;
     }
 
-    var obstacleTravel = 480; // px, total distance the obstacle crosses
+    // The obstacle is moved with a real x coordinate instead of mixing CSS
+    // left:100% with getBoundingClientRect(). This keeps collision detection
+    // deterministic on desktop and mobile.
+    var obstacleX = 0;
+    var obstacleWidth = 28;
     var obstacleStart = null;
     var obstacleDuration = 0;
     var rafId = null;
+    var lastFrameTime = null;
+    var runnerWidth = 0;
+    var playerWidth = 28;
+    var playerX = 26;
+
+    function getRunnerWidth(){
+      return Math.max(1, runnerEl.clientWidth || 680);
+    }
+
+    function placeObstacleAtStart(){
+      runnerWidth = getRunnerWidth();
+      obstacleX = runnerWidth + 24;
+      obstacleEl.style.left = obstacleX + 'px';
+      obstacleEl.style.transform = 'translateX(0)';
+    }
 
     function spawnObstacle(){
-      // Weather: occasionally a rain spell rolls in for a few rounds and eases
-      // the pace back off, then clears.
+      if(!playing) return;
+
+      // Rain is an occasional surprise event, not something that can start
+      // on every obstacle. Wait several rounds, then use a chance to trigger
+      // a short storm. After the storm ends, another cooldown is required.
       if(raining){
         rainRoundsLeft--;
-        if(rainRoundsLeft <= 0) raining = false;
-      } else if(Math.random() < 0.12){
-        raining = true;
-        rainRoundsLeft = 4 + Math.floor(Math.random() * 3);
-        if(statusEl) statusEl.textContent = 'Rain — pace eases up a bit.';
+        if(rainRoundsLeft <= 0){
+          raining = false;
+          rainCooldown = 6 + Math.floor(Math.random() * 5); // 6–10 rounds
+        }
+      } else {
+        if(rainCooldown > 0){
+          rainCooldown--;
+        } else if(Math.random() < 0.35){
+          raining = true;
+          rainRoundsLeft = 4 + Math.floor(Math.random() * 3); // 4–6 rounds
+          rainCooldown = 0;
+        } else {
+          // Failed trigger: give it another short random wait so it feels
+          // unpredictable rather than checking on every single obstacle.
+          rainCooldown = 2 + Math.floor(Math.random() * 4); // 2–5 rounds
+        }
       }
       runnerEl.classList.toggle('raining', raining);
 
@@ -1336,54 +1539,72 @@
       lastObstacleEmoji = emoji;
       obstacleEl.textContent = emoji;
       obstacleEl.style.bottom = obstacleType === 'ground' ? '18px' : '46px';
-      obstacleEl.style.transform = 'translateX(0px)';
 
-      obstacleDuration = raining ? Math.round(speedMs * 1.4) : speedMs;
+      placeObstacleAtStart();
       obstacleStart = null;
+      lastFrameTime = null;
+      obstacleDuration = raining ? Math.round(speedMs * 1.4) : speedMs;
       rafId = requestAnimationFrame(gameLoop);
     }
 
-    function shrinkRect(rect, fx, fy){
-      var dx = rect.width * fx;
-      var dy = rect.height * fy;
-      return { left: rect.left + dx, right: rect.right - dx, top: rect.top + dy, bottom: rect.bottom - dy };
-    }
-
-    // Moves the obstacle AND checks collision at the same simulated instant,
-    // every frame — so there's no way for the two to drift out of sync the
-    // way separate CSS-animation + polling-loop timing could.
     function gameLoop(ts){
       if(!playing) return;
-      if(obstacleStart === null) obstacleStart = ts;
-      var elapsed = ts - obstacleStart;
-      var progress = Math.min(elapsed / obstacleDuration, 1);
-      obstacleEl.style.transform = 'translateX(' + (-obstacleTravel * progress) + 'px)';
 
-      var p = shrinkRect(playerEl.getBoundingClientRect(), 0.16, 0.05);
-      var o = shrinkRect(obstacleEl.getBoundingClientRect(), 0.14, 0.05);
+      if(obstacleStart === null){
+        obstacleStart = ts;
+        lastFrameTime = ts;
+      }
+
+      var dt = Math.min(50, Math.max(0, ts - (lastFrameTime || ts)));
+      lastFrameTime = ts;
+
+      runnerWidth = getRunnerWidth();
+
+      // Convert the existing speed into px/frame. The obstacle always starts
+      // outside the right edge and travels completely through the runner.
+      var travelPx = runnerWidth + obstacleWidth + 60;
+      var pxPerMs = travelPx / obstacleDuration;
+      obstacleX -= pxPerMs * dt;
+      obstacleEl.style.left = obstacleX + 'px';
+      obstacleEl.style.transform = 'translateX(0)';
+
+      // Collision is only checked while the game is actively running.
+      // Jumping moves the player via its CSS animation, so its actual visual
+      // bounding box is still used here for the jump/duck interaction.
+      var p = playerEl.getBoundingClientRect();
+      var o = obstacleEl.getBoundingClientRect();
       var overlapX = p.left < o.right && p.right > o.left;
       var overlapY = p.top < o.bottom && p.bottom > o.top;
+
       if(overlapX && overlapY){
         endGame('Hit one!');
         return;
       }
 
-      if(progress < 1){
-        rafId = requestAnimationFrame(gameLoop);
-      } else {
+      // Once the obstacle is fully beyond the player and off the screen,
+      // count it as passed and create the next obstacle.
+      if(obstacleX + obstacleWidth < 0){
         score++;
         scoreEl.textContent = score;
         speedMs = Math.max(680, speedMs - 45);
         spawnObstacle();
+        return;
       }
+
+      rafId = requestAnimationFrame(gameLoop);
     }
 
     function endGame(message){
       playing = false;
       awaitingRestart = true;
+      replyVisible = true;
       if(rafId) cancelAnimationFrame(rafId);
+      rafId = null;
+
       runnerEl.classList.add('hit');
       overlayEl.hidden = false;
+
+      // Hide all gameplay controls while Reply is visible.
       actionButtonsEl.hidden = true;
       controlsHintEl.hidden = true;
 
@@ -1394,47 +1615,76 @@
         saveBest();
         text += ' New best!';
       }
-      statusEl.textContent = text + ' Tap restart to try again.';
+      statusEl.textContent = text + ' Tap reply to play again.';
     }
 
     function startGame(){
+      if(rafId) cancelAnimationFrame(rafId);
+      rafId = null;
+
       score = 0;
       speedMs = 2000;
       raining = false;
       rainRoundsLeft = 0;
-      runnerEl.classList.remove('raining', 'hit');
-      overlayEl.hidden = true;
-      actionButtonsEl.hidden = false;
-      controlsHintEl.hidden = false;
-      scoreEl.textContent = score;
+      rainCooldown = 3 + Math.floor(Math.random() * 5); // 3–7 rounds before first possible rain
       playing = true;
       awaitingRestart = false;
+      replyVisible = false;
+      obstacleStart = null;
+      lastFrameTime = null;
+
+      isJumping = false;
+      isDucking = false;
+      playerEl.classList.remove('jumping', 'ducking');
+      duckBtn.classList.remove('is-pressed');
+
+      runnerEl.classList.remove('raining', 'hit');
+      overlayEl.hidden = true;
+
+      // Gameplay controls are available once a platform is selected.
+      actionButtonsEl.hidden = false;
+      controlsHintEl.hidden = false;
+
+      scoreEl.textContent = score;
       statusEl.textContent = 'Go!';
+
       spawnObstacle();
     }
 
     function jump(){
-      if(awaitingRestart){ startGame(); return; }
-      if(!playing || isJumping) return;
+      if(awaitingRestart || replyVisible || !playing) return;
+      if(isJumping) return;
+
       isJumping = true;
+      isDucking = false;
       playerEl.classList.remove('ducking');
       playerEl.classList.add('jumping');
     }
 
-    var duckTimer = null;
     function duck(){
-      if(awaitingRestart){ startGame(); return; }
-      if(!playing || isJumping) return;
+      if(awaitingRestart || replyVisible || !playing) return;
+      if(isJumping) return;
+
       isDucking = true;
       playerEl.classList.add('ducking');
-      clearTimeout(duckTimer);
-      duckTimer = setTimeout(function(){
-        isDucking = false;
-        playerEl.classList.remove('ducking');
-      }, 650);
+    }
+
+    function releaseDuck(){
+      if(!isDucking) return;
+
+      isDucking = false;
+      playerEl.classList.remove('ducking');
+      setDuckButtonPressed(false);
     }
 
     function choosePlatform(p){
+      // Stop any previous game before creating the selected platform.
+      if(rafId) cancelAnimationFrame(rafId);
+      rafId = null;
+      playing = false;
+      awaitingRestart = false;
+      replyVisible = false;
+
       platform = p;
       playerEl.innerHTML = playerIcons[p];
       runnerEl.classList.toggle('theme-android', p === 'android');
@@ -1443,6 +1693,11 @@
       playEl.classList.toggle('theme-ios', p === 'ios');
       selectEl.hidden = true;
       playEl.hidden = false;
+
+      // Make absolutely sure the Reply overlay is hidden when entering a game.
+      overlayEl.hidden = true;
+      runnerEl.classList.remove('hit');
+
       startGame();
     }
 
@@ -1451,11 +1706,14 @@
       isJumping = false;
     });
 
+    // Reply/replay button: restart the game from a clean state.
     restartBtn.addEventListener('click', function(){
-      if(awaitingRestart) startGame();
+      if(replyVisible || awaitingRestart){
+        startGame();
+      }
     });
 
-    pickAndroidBtn.addEventListener('click', function(){ choosePlatform('android'); });
+        pickAndroidBtn.addEventListener('click', function(){ choosePlatform('android'); });
     pickIosBtn.addEventListener('click', function(){ choosePlatform('ios'); });
     switchBtn.addEventListener('click', function(){
       playing = false;
@@ -1465,17 +1723,59 @@
     });
 
     jumpBtn.addEventListener('click', jump);
-    duckBtn.addEventListener('click', duck);
+
+    // Duck is a press-and-hold control: the button looks pressed only while
+    // the pointer/finger is down, then immediately returns to normal.
+    function setDuckButtonPressed(pressed){
+      duckBtn.classList.toggle('is-pressed', pressed);
+    }
+
+    duckBtn.addEventListener('pointerdown', function(e){
+      e.preventDefault();
+      setDuckButtonPressed(true);
+      if(duckBtn.setPointerCapture && e.pointerId != null) duckBtn.setPointerCapture(e.pointerId);
+      duck();
+    });
+    duckBtn.addEventListener('pointerup', function(e){
+      e.preventDefault();
+      releaseDuck();
+    });
+    duckBtn.addEventListener('pointercancel', function(){
+      releaseDuck();
+    });
+    duckBtn.addEventListener('pointerleave', function(e){
+      if(e.buttons === 0) releaseDuck();
+    });
+    duckBtn.addEventListener('lostpointercapture', function(){
+      releaseDuck();
+    });
 
     document.addEventListener('keydown', function(e){
       if(playEl.hidden) return;
+
       if(e.code === 'Space' || e.code === 'ArrowUp'){
         e.preventDefault();
         jump();
       } else if(e.code === 'ArrowDown'){
         e.preventDefault();
-        duck(); // holding the key auto-repeats keydown, which just re-extends the timer
+
+        // Start ducking only when the game is actually accepting input.
+        if(!replyVisible && !awaitingRestart && playing && !isJumping){
+          if(!e.repeat) setDuckButtonPressed(true);
+          duck();
+        }
       }
+    });
+
+    document.addEventListener('keyup', function(e){
+      if(e.code === 'ArrowDown'){
+        releaseDuck();
+      }
+    });
+
+    // Also release duck if the browser/window loses focus while the key is held.
+    window.addEventListener('blur', function(){
+      releaseDuck();
     });
   })();
 
