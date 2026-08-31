@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Aravind — React Native Developer</title>
-<meta name="description" content="Aravind — React Native developer in Phnom Penh, Cambodia. I build cross-platform apps and the native Android/Kotlin modules behind them.">
+<title>Aravind Devaraj — React Native Developer</title>
+<meta name="description" content="Aravind Devaraj — mobile app developer in Phnom Penh, Cambodia. I build cross-platform apps with React Native for Android and iOS.">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#0a0e14">
 
@@ -30,6 +30,7 @@
     --accent-cyan:#56d4dd;
     --accent-green:#3ddc84;
     --topbar-bg: rgba(10,14,20,0.85);
+    --notch-bg: #262e40;
     /* fixed brand gradient — always paired with dark text, so it stays punchy in both themes */
     --grad-solid: linear-gradient(120deg, #7f52ff, #f88909);
     /* theme-adaptive gradient — used where the gradient itself IS the text, so it needs to
@@ -54,6 +55,7 @@
     --accent-cyan:#0969da;
     --accent-green:#1a7f37;
     --topbar-bg: rgba(255,255,255,0.85);
+    --notch-bg: #000000;
   }
 
   *{box-sizing:border-box;}
@@ -106,6 +108,7 @@
     max-width:var(--maxw); margin:0 auto;
     display:flex; align-items:center; gap:1rem;
     padding:.85rem 1.5rem;
+    position:relative;
   }
   .brand-mark{
     font-family:var(--mono); font-weight:800; font-size:1.1rem;
@@ -201,40 +204,15 @@
   .cursor{ display:inline-block; margin-left:2px; animation:blink 1s step-end infinite; color:var(--accent-cyan); }
   @keyframes blink{ 50%{ opacity:0; } }
 
+  .clock-sec{ display:inline-block; min-width:1.4em; }
+  .clock-sec.tick{ animation:clock-tick .35s ease; }
+  @keyframes clock-tick{
+    0%{ transform:scale(1.3); opacity:.45; }
+    100%{ transform:scale(1); opacity:1; }
+  }
+
   .bio{
     max-width:56ch; color:var(--text); font-size:1.02rem; margin:0 0 1.6rem;
-  }
-
-  /* ---------- Flanking Android/iOS illustrations ---------- */
-  .phone-decor{
-    position:absolute; top:50%; width:130px; z-index:0;
-    display:flex; flex-direction:column; align-items:center; gap:.6rem;
-    opacity:.85; pointer-events:none;
-    filter:drop-shadow(0 18px 34px rgba(0,0,0,.28));
-    animation:phone-float 7s ease-in-out infinite;
-    transform:translateY(-50%) rotate(var(--rot,0deg));
-  }
-  .phone-decor svg{ width:100%; height:auto; display:block; }
-  .phone-decor-left{ left:1.5vw; --rot:-4deg; }
-  .phone-decor-right{ right:1.5vw; --rot:4deg; animation-delay:.8s; }
-  .phone-label{
-    font-family:var(--mono); font-size:.68rem; letter-spacing:.08em;
-    text-transform:uppercase; color:var(--text-faint);
-  }
-  .pd-bezel{ fill:var(--bg-panel); stroke:var(--border); stroke-width:2; }
-  .pd-notch{ fill:var(--bg); }
-  .pd-screen{ fill:var(--bg-panel-alt); }
-  .pd-dim{ fill:var(--border); }
-  .pd-faint{ fill:var(--text-faint); }
-  .pd-accent-green{ fill:var(--accent-green); opacity:.4; }
-  .pd-accent-cyan{ fill:var(--accent-cyan); opacity:.4; }
-
-  @keyframes phone-float{
-    0%,100%{ transform:translateY(-50%) rotate(var(--rot,0deg)); }
-    50%{ transform:translateY(calc(-50% - 12px)) rotate(var(--rot,0deg)); }
-  }
-  @media (max-width:1360px){
-    .phone-decor{ display:none; }
   }
 
   .badges{
@@ -254,11 +232,25 @@
     padding:.7rem 1.3rem; border-radius:7px; border:1px solid transparent;
     transition:transform .15s ease, opacity .15s ease, border-color .15s ease;
     display:inline-block;
+    background:none; cursor:pointer; appearance:none; -webkit-appearance:none;
   }
   .btn:hover{ transform:translateY(-2px); }
   .btn-primary{ background:var(--grad-solid); color:#0a0e14; }
   .btn-primary:hover{ opacity:.92; }
   .btn-ghost{ border-color:var(--border); color:var(--text); }
+  /* Real platform brand colors — fixed regardless of site theme, since these
+     represent external brands rather than this page's own adaptive palette. */
+  .btn-android{ background:#3DDC84; color:#0a1f14; }
+  .btn-android:hover{ opacity:.92; }
+  .btn-ios{ background:#007AFF; color:#ffffff; }
+  .btn-ios:hover{ opacity:.92; }
+
+  /* Once a platform is picked in the game, the action buttons pick up that
+     platform's real brand color too — same treatment for both platforms. */
+  .game-play.theme-android #game-jump{ background:#3DDC84; color:#0a1f14; }
+  .game-play.theme-android #game-duck{ border-color:#3DDC84; color:#3DDC84; }
+  .game-play.theme-ios #game-jump{ background:#007AFF; color:#ffffff; }
+  .game-play.theme-ios #game-duck{ border-color:#007AFF; color:#007AFF; }
   .btn-ghost:hover{ border-color:var(--accent-cyan); }
 
   /* ---------- Sections ---------- */
@@ -294,12 +286,44 @@
     display:inline-block; margin-top:1.8rem; font-family:var(--mono); font-size:.9rem; color:var(--accent-orange);
   }
   .link-more:hover{ text-decoration:underline; }
+  button.link-more{ background:none; border:none; cursor:pointer; padding:0; }
+
+  /* ---------- Experience timeline ---------- */
+  .timeline{ position:relative; padding-left:1.7rem; margin-bottom:2.2rem; }
+  .timeline::before{
+    content:""; position:absolute; left:4px; top:8px; bottom:8px; width:2px;
+    background:var(--border);
+  }
+  .job{ position:relative; margin-bottom:2rem; }
+  .job:last-child{ margin-bottom:0; }
+  .job::before{
+    content:""; position:absolute; left:-1.7rem; top:6px; width:10px; height:10px;
+    border-radius:50%; background:var(--bg-panel); border:2px solid var(--accent-green);
+  }
+  .job-head{ display:flex; flex-wrap:wrap; align-items:baseline; gap:.6rem; margin-bottom:.3rem; }
+  .job-title{ font-family:var(--mono); font-weight:600; font-size:1rem; margin:0; }
+  .job-dates{ font-family:var(--mono); font-size:.78rem; color:var(--text-faint); }
+  .job-company{ color:var(--text-dim); font-size:.9rem; margin:0 0 .8rem; }
+  .job-points{ margin:0; padding-left:1.15rem; display:flex; flex-direction:column; gap:.45rem; }
+  .job-points li{ color:var(--text); font-size:.92rem; }
+
+  .education{ border-top:1px solid var(--border-soft); padding-top:1.5rem; }
+  .edu-row{
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:.4rem;
+    font-family:var(--mono); font-size:.85rem; padding:.5rem 0;
+  }
+  .edu-degree{ color:var(--text); }
+  .edu-school{ color:var(--text-faint); }
 
   /* ---------- Google Play apps ---------- */
+  .app-grid{
+    display:grid; grid-template-columns:repeat(auto-fit, minmax(300px,1fr));
+    gap:1.1rem; margin-bottom:1.3rem;
+  }
   .app-featured{
     display:flex; gap:1.4rem; align-items:flex-start; flex-wrap:wrap;
     background:var(--bg-panel); border:1px solid var(--border); border-radius:14px;
-    padding:1.6rem; margin-bottom:1.3rem;
+    padding:1.6rem;
     transition:transform .2s ease, border-color .2s ease;
   }
   .app-featured:hover{ transform:translateY(-4px); border-color:var(--accent-violet); }
@@ -365,6 +389,164 @@
   .term-line .prompt{ color:var(--accent-orange); }
   .term-line a{ color:var(--accent-cyan); }
   .term-line a:hover{ text-decoration:underline; }
+  .term-comment{ color:var(--text-faint); font-style:italic; font-size:.85rem; }
+  .term-comment .prompt{ color:var(--text-faint); }
+
+  /* ---------- Jump-the-bugs mini-game ---------- */
+  .game{
+    position:relative;
+    background:var(--bg-panel); border:1px solid var(--border); border-radius:14px;
+    padding:2.6rem 2.2rem; max-width:760px; margin:0 auto; text-align:center;
+  }
+  .game-fs-btn{
+    position:absolute; top:14px; right:14px; width:32px; height:32px;
+    background:none; border:1px solid var(--border); border-radius:6px;
+    color:var(--text-dim); cursor:pointer; font-size:1rem; line-height:1;
+    transition:color .15s ease, border-color .15s ease;
+  }
+  .game-fs-btn:hover{ color:var(--text); border-color:var(--accent-cyan); }
+  .game:fullscreen{
+    max-width:100%; width:100vw; height:100vh; border-radius:0;
+    display:flex; flex-direction:column; justify-content:center;
+    padding:2rem;
+  }
+  .game:-webkit-full-screen{
+    max-width:100%; width:100vw; height:100vh; border-radius:0;
+    display:flex; flex-direction:column; justify-content:center;
+    padding:2rem;
+  }
+  .game:fullscreen .runner{ height:min(65vh, 520px); }
+  .game-prompt{
+    font-family:var(--mono); font-size:.92rem; color:var(--text-dim); margin:0 0 1.2rem;
+  }
+  .game-scores{
+    display:flex; justify-content:space-between;
+    font-family:var(--mono); font-size:.82rem; color:var(--text-dim);
+    margin-bottom:1rem;
+  }
+  .game-scores strong{ color:var(--text); font-size:1.15rem; }
+  .game-buttons{ display:flex; gap:.9rem; justify-content:center; margin-bottom:1rem; }
+  .game-btn{ flex:1; max-width:150px; }
+  .game-btn:disabled{ opacity:.4; cursor:not-allowed; transform:none; }
+  .game-status{
+    font-family:var(--mono); font-size:.85rem; color:var(--text-dim);
+    min-height:1.4em; margin:0 0 .3rem;
+  }
+  .game-controls{
+    font-family:var(--mono); font-size:.72rem; color:var(--text-faint);
+    margin:0 0 1.1rem;
+  }
+  .game-switch-link{ margin-top:.2rem; }
+
+  /* the runner "screen" — framed like a phone held in landscape.
+     Fixed white background regardless of site theme, so it reads as its
+     own bright little device screen rather than fighting dark mode. */
+  .runner{
+    position:relative; height:300px; margin-bottom:1rem;
+    background:#ffffff; border:3px solid var(--border); border-radius:22px;
+    overflow:hidden; transition:border-color .2s ease, filter .4s ease;
+  }
+  .runner.theme-android{ border-color:var(--accent-green); }
+  .runner.theme-ios{ border-color:var(--accent-cyan); }
+
+  /* Android landscape: punch-hole camera on the edge */
+  .runner-cam{
+    position:absolute; top:50%; left:9px; transform:translateY(-50%);
+    width:8px; height:8px; border-radius:50%; background:#000;
+    box-shadow:0 0 0 1px rgba(255,255,255,.15);
+    display:none; z-index:2;
+  }
+  .runner.theme-android .runner-cam{ display:block; }
+
+  /* iOS landscape: the notch migrates to the side edge when the phone is rotated */
+  .runner-notch-side{
+    position:absolute; top:50%; left:0; transform:translateY(-50%);
+    width:9px; height:50px; border-radius:0 9px 9px 0; background:#000;
+    box-shadow:0 0 0 1px rgba(255,255,255,.1);
+    display:none; z-index:2;
+  }
+  .runner.theme-ios .runner-notch-side{ display:block; }
+
+  .runner-world{ position:absolute; inset:0; transition:filter .3s ease; }
+  .runner.hit .runner-world{ filter:blur(3px); }
+  .runner-overlay{
+    position:absolute; inset:0; z-index:5;
+    display:flex; align-items:center; justify-content:center;
+    background:rgba(255,255,255,.45);
+  }
+  .runner-restart{
+    width:54px; height:54px; border-radius:50%;
+    background:var(--grad-solid); border:none; cursor:pointer;
+    font-size:1.5rem; color:#0a0e14; line-height:1;
+    box-shadow:0 6px 18px rgba(0,0,0,.3);
+    transition:transform .15s ease;
+  }
+  .runner-restart:hover{ transform:scale(1.08) rotate(20deg); }
+
+  .runner-bg{ position:absolute; inset:0; overflow:hidden; pointer-events:none; }
+  .runner-cloud{
+    position:absolute; top:16px; width:26px; height:9px; border-radius:6px;
+    background:#c3cbd6; opacity:.8;
+    animation:runner-cloud-drift 9s linear infinite;
+  }
+  .runner-cloud.c2{ top:34px; opacity:.4; animation-delay:4.5s; }
+  .runner-cloud.c3{ top:8px; width:18px; height:7px; opacity:.35; animation-duration:12s; animation-delay:7.5s; }
+  .gp-body{ fill:#eef1f5; stroke:#aab3c2; stroke-width:1.5; }
+  .gp-limb{ fill:#aab3c2; }
+  @keyframes runner-cloud-drift{
+    from{ transform:translateX(360px); }
+    to{ transform:translateX(-60px); }
+  }
+
+  .runner.raining{ filter:brightness(.9); }
+  .runner-rain{
+    position:absolute; inset:0; overflow:hidden; pointer-events:none;
+    opacity:0; transition:opacity .3s ease;
+  }
+  .runner.raining .runner-rain{ opacity:1; }
+  .rain-drop{
+    position:absolute; top:-16px; width:2px; height:13px; border-radius:1px;
+    background:rgba(120,170,255,.55);
+    animation:rain-fall .8s linear infinite;
+  }
+  .rain-drop:nth-child(1){ left:8%; animation-delay:0s; }
+  .rain-drop:nth-child(2){ left:24%; animation-delay:.25s; }
+  .rain-drop:nth-child(3){ left:42%; animation-delay:.1s; }
+  .rain-drop:nth-child(4){ left:60%; animation-delay:.35s; }
+  .rain-drop:nth-child(5){ left:78%; animation-delay:.15s; }
+  .rain-drop:nth-child(6){ left:92%; animation-delay:.4s; }
+  @keyframes rain-fall{
+    from{ transform:translateY(0); }
+    to{ transform:translateY(150px); }
+  }
+
+  .runner-ground{
+    position:absolute; left:0; right:0; bottom:22px; height:2px;
+    background:#c3cbd6; transition:background .2s ease;
+  }
+  .runner.theme-android .runner-ground{ background:var(--accent-green); }
+  .runner.theme-ios .runner-ground{ background:var(--accent-cyan); }
+
+  .runner-player{
+    position:absolute; left:26px; bottom:22px; width:28px; height:34px;
+    transform:translateY(0) scaleY(1); transform-origin:bottom;
+    transition:transform .12s ease;
+  }
+  .runner-player svg{ display:block; width:100%; height:100%; }
+  .runner-player.jumping{ animation:runner-jump .55s ease; }
+  .runner-player.ducking{ transform:scaleY(.45); transition:none; }
+  @keyframes runner-jump{
+    0%{ transform:translateY(0) scaleY(1); }
+    40%{ transform:translateY(-58px) scaleY(1); }
+    100%{ transform:translateY(0) scaleY(1); }
+  }
+
+  .runner-obstacle{
+    position:absolute; bottom:18px; left:100%;
+    width:28px; height:28px; font-size:1.5rem; line-height:1;
+    display:flex; align-items:center; justify-content:center;
+    transform:translateX(0);
+  }
   .copy-btn{
     font-family:var(--mono); font-size:.72rem; color:var(--text-dim);
     background:transparent; border:1px solid var(--border); border-radius:5px;
@@ -383,11 +565,143 @@
     overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
   }
 
+  /* Decorative iPhone-style frame: dormant on desktop/tablet, only wakes up
+     at phone widths (see media query below). */
+  .topbar-notch, .frame-edge, .frame-home-indicator{ display:none; }
+
+  /* Mobile drawer nav: dormant on desktop/tablet too. */
+  .hamburger{ display:none; }
+  .drawer-backdrop{ display:none; }
+  .drawer{ display:none; }
+
   @media (max-width:640px){
     .hero-inner{ grid-template-columns:1fr; }
     .gutter{ display:none; }
     .term-line{ flex-direction:column; align-items:flex-start; gap:.2rem; }
     .copy-btn{ margin-left:0; }
+
+    /* The horizontal tab bar doesn't have room on phone widths — swap it
+       for a hamburger + off-canvas drawer instead. */
+    .tabs{ display:none; }
+    .topbar .theme-toggle{ display:none; } /* lives inside the drawer on mobile instead */
+    .repo-btn{ margin-left:auto; }
+
+    .hamburger{
+      display:flex; flex-direction:column; justify-content:center; gap:4px;
+      width:32px; height:32px; flex-shrink:0;
+      background:none; border:1px solid var(--border); border-radius:6px;
+      cursor:pointer; padding:0;
+    }
+    .hamburger span{
+      display:block; height:2px; margin:0 7px; border-radius:1px;
+      background:var(--text); transition:transform .2s ease, opacity .2s ease;
+    }
+    .hamburger[aria-expanded="true"] span:nth-child(1){ transform:translateY(6px) rotate(45deg); }
+    .hamburger[aria-expanded="true"] span:nth-child(2){ opacity:0; }
+    .hamburger[aria-expanded="true"] span:nth-child(3){ transform:translateY(-6px) rotate(-45deg); }
+
+    .drawer-backdrop{
+      display:block; position:fixed; inset:0; z-index:997;
+      background:rgba(0,0,0,.55); opacity:0; pointer-events:none;
+      transition:opacity .25s ease;
+    }
+    .drawer-backdrop.open{ opacity:1; pointer-events:auto; }
+
+    .drawer{
+      display:flex; flex-direction:column; gap:.2rem;
+      position:fixed; top:0; right:0; bottom:0; width:76%; max-width:290px;
+      background:var(--bg-panel); border-left:1px solid var(--border);
+      border-radius:18px 0 0 18px;
+      z-index:998; padding:2.5rem 1.3rem 1.4rem;
+      transform:translateX(100%); transition:transform .3s ease;
+      overflow-y:auto;
+    }
+    .drawer.open{ transform:translateX(0); }
+    .drawer-notch{
+      position:absolute; top:10px; left:50%; transform:translateX(-50%);
+      width:104px; height:24px; border-radius:14px;
+      background:var(--notch-bg); box-shadow:0 0 0 1px rgba(255,255,255,.16), 0 2px 6px rgba(0,0,0,.3);
+      pointer-events:none;
+    }
+    .drawer-head{
+      display:flex; align-items:center; justify-content:space-between;
+      margin-bottom:.8rem; padding-bottom:.9rem; border-bottom:1px solid var(--border-soft);
+    }
+    .drawer-close{
+      width:28px; height:28px; background:none; border:1px solid var(--border);
+      border-radius:6px; color:var(--text-dim); cursor:pointer; font-size:.9rem;
+    }
+    .drawer-link{
+      font-family:var(--mono); font-size:.92rem; color:var(--text-dim);
+      padding:.7rem .1rem; border-bottom:1px solid var(--border-soft);
+    }
+    .drawer-link:hover{ color:var(--text); }
+    .drawer-divider{ height:1px; background:var(--border-soft); margin:.7rem 0; }
+    .drawer .theme-toggle{ align-self:flex-start; }
+
+    /* The page becomes a rounded "screen" with its own notch and home
+       indicator, and scrolls inside that screen instead of the browser
+       window scrolling directly — a phone, showing a phone developer's work. */
+    html, body{ height:100%; }
+    body{ overflow:hidden; background:#000; }
+    body::before{ display:none; }
+
+    .frame-edge, .frame-home-indicator{
+      display:block; position:fixed; z-index:999; background:#000; pointer-events:none;
+    }
+    .topbar-notch{
+      display:block; position:absolute; z-index:60; pointer-events:none;
+      top:50%; left:50%; transform:translate(-50%,-50%);
+      width:120px; height:28px; border-radius:17px;
+      background:var(--notch-bg);
+      box-shadow:0 0 0 1px rgba(255,255,255,.16), 0 2px 8px rgba(0,0,0,.35);
+      opacity:1; transition:opacity .2s ease;
+    }
+    body.drawer-open .topbar-notch{ opacity:0; }
+    .notch-camera{
+      position:absolute; top:50%; left:26%; transform:translate(-50%,-50%);
+      width:12px; height:12px; border-radius:50%;
+      background:radial-gradient(circle at 35% 35%, #3a4a72 0%, #0a0d14 55%, #000 100%);
+      box-shadow:0 0 0 1px rgba(130,170,255,.3);
+    }
+    .notch-infrared{
+      position:absolute; top:50%; left:52%; transform:translate(-50%,-50%);
+      width:5px; height:5px; border-radius:50%;
+      background:#ff3b3b;
+      box-shadow:0 0 4px 1px rgba(255,59,59,.7);
+      opacity:.55;
+    }
+    .notch-sensor{
+      position:absolute; top:50%; left:76%; transform:translate(-50%,-50%);
+      width:7px; height:7px; border-radius:50%;
+      background:var(--accent-green);
+      box-shadow:0 0 5px 1px var(--accent-green);
+      animation:notch-sensor-blink 2.8s ease-in-out infinite;
+    }
+    @keyframes notch-sensor-blink{
+      0%, 100%{ opacity:.2; }
+      50%{ opacity:1; }
+    }
+    .frame-edge{ top:0; bottom:0; width:7px; }
+    .frame-edge-left{ left:0; }
+    .frame-edge-right{ right:0; }
+    .frame-home-indicator{
+      bottom:9px; left:50%; transform:translateX(-50%);
+      width:104px; height:4px; border-radius:3px;
+      background:var(--text-faint); opacity:.6;
+    }
+
+    .phone-screen{
+      position:relative;
+      margin:36px 7px 24px;
+      height:calc(100vh - 60px);
+      height:calc(100dvh - 60px);
+      border-radius:32px;
+      overflow-y:auto;
+      -webkit-overflow-scrolling:touch;
+      background:var(--bg);
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.06);
+    }
   }
 </style>
 </head>
@@ -395,14 +709,27 @@
 
 <a class="skip-link" href="#main">Skip to content</a>
 
+<!-- Decorative iPhone-style frame — only active on narrow/mobile viewports -->
+<div class="frame-edge frame-edge-left" aria-hidden="true"></div>
+<div class="frame-edge frame-edge-right" aria-hidden="true"></div>
+<div class="frame-home-indicator" aria-hidden="true"></div>
+
+<div class="phone-screen">
 <header class="topbar">
   <div class="topbar-inner">
     <a class="brand" href="#hero" aria-label="Aravind — home"><span class="brand-mark">A&gt;</span></a>
+    <div class="topbar-notch" aria-hidden="true">
+      <span class="notch-camera"></span>
+      <span class="notch-infrared"></span>
+      <span class="notch-sensor"></span>
+    </div>
     <nav class="tabs" aria-label="Primary">
       <a href="#hero" class="tab active" data-tab="hero">README.md</a>
+      <a href="#experience" class="tab" data-tab="experience">experience.log</a>
       <a href="#projects" class="tab" data-tab="projects">projects.json</a>
       <a href="#apps" class="tab" data-tab="apps">apps.json</a>
       <a href="#stack" class="tab" data-tab="stack">stack.yml</a>
+      <a href="#play" class="tab" data-tab="play">play.js</a>
       <a href="#contact" class="tab" data-tab="contact">contact.sh</a>
     </nav>
     <a class="repo-btn" id="stat-repobtn" href="https://github.com/aravind3566" target="_blank" rel="noopener">★ 54+</a>
@@ -410,53 +737,53 @@
       <button class="diff-line is-active" type="button" data-theme="dark" aria-pressed="true">+ dark</button>
       <button class="diff-line" type="button" data-theme="light" aria-pressed="false">- light</button>
     </div>
+    <button class="hamburger" id="menu-open" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="drawer">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </header>
+
+<div class="drawer-backdrop" id="drawer-backdrop"></div>
+<nav class="drawer" id="drawer" aria-label="Mobile navigation" aria-hidden="true">
+  <div class="drawer-notch" aria-hidden="true">
+    <span class="notch-camera"></span>
+    <span class="notch-infrared"></span>
+    <span class="notch-sensor"></span>
+  </div>
+  <div class="drawer-head">
+    <span class="brand-mark">A&gt;</span>
+    <button class="drawer-close" id="menu-close" type="button" aria-label="Close menu">✕</button>
+  </div>
+  <a href="#hero" class="drawer-link">README.md</a>
+  <a href="#experience" class="drawer-link">experience.log</a>
+  <a href="#projects" class="drawer-link">projects.json</a>
+  <a href="#apps" class="drawer-link">apps.json</a>
+  <a href="#stack" class="drawer-link">stack.yml</a>
+  <a href="#play" class="drawer-link">play.js</a>
+  <a href="#contact" class="drawer-link">contact.sh</a>
+  <div class="drawer-divider"></div>
+  <div class="theme-toggle" role="group" aria-label="Theme">
+    <button class="diff-line is-active" type="button" data-theme="dark" aria-pressed="true">+ dark</button>
+    <button class="diff-line" type="button" data-theme="light" aria-pressed="false">- light</button>
+  </div>
+</nav>
+
 
 <main id="main">
 
   <section id="hero" class="hero">
-    <div class="phone-decor phone-decor-left" aria-hidden="true">
-      <svg viewBox="0 0 140 300" focusable="false">
-        <rect class="pd-bezel" x="4" y="4" width="132" height="292" rx="26"/>
-        <circle class="pd-dim" cx="70" cy="20" r="4"/>
-        <rect class="pd-screen" x="16" y="36" width="108" height="240" rx="10"/>
-        <rect class="pd-faint" x="26" y="50" width="56" height="6" rx="3"/>
-        <rect class="pd-dim" x="26" y="70" width="88" height="34" rx="8"/>
-        <rect class="pd-accent-green" x="26" y="112" width="88" height="34" rx="8"/>
-        <rect class="pd-dim" x="26" y="154" width="88" height="34" rx="8"/>
-        <rect class="pd-dim" x="26" y="196" width="88" height="34" rx="8"/>
-        <rect class="pd-faint" x="55" y="266" width="30" height="4" rx="2"/>
-      </svg>
-      <span class="phone-label">Android</span>
-    </div>
-
-    <div class="phone-decor phone-decor-right" aria-hidden="true">
-      <svg viewBox="0 0 140 300" focusable="false">
-        <rect class="pd-bezel" x="4" y="4" width="132" height="292" rx="34"/>
-        <rect class="pd-notch" x="52" y="16" width="36" height="10" rx="5"/>
-        <rect class="pd-screen" x="16" y="34" width="108" height="242" rx="14"/>
-        <rect class="pd-dim" x="26" y="48" width="88" height="16" rx="8"/>
-        <rect class="pd-accent-cyan" x="26" y="76" width="88" height="30" rx="8"/>
-        <rect class="pd-dim" x="26" y="114" width="88" height="30" rx="8"/>
-        <rect class="pd-dim" x="26" y="152" width="88" height="30" rx="8"/>
-        <rect class="pd-dim" x="26" y="190" width="88" height="30" rx="8"/>
-        <rect class="pd-faint" x="50" y="266" width="40" height="4" rx="2"/>
-      </svg>
-      <span class="phone-label">iOS</span>
-    </div>
-
     <div class="hero-inner reveal">
       <div class="gutter" aria-hidden="true">01<br>02<br>03<br>04<br>05<br>06<br>07<br>08</div>
       <div class="hero-content">
-        <p class="eyebrow">// android developer · phnom penh, cambodia</p>
+        <p class="eyebrow">// mobile app developer · phnom penh, cambodia</p>
         <h1>Hi, I'm <span class="grad-text">Aravind</span></h1>
         <p class="role"><span class="prompt">&gt;</span><span id="typewriter"></span><span class="cursor" aria-hidden="true">▌</span></p>
-        <p class="bio">I build cross-platform apps with React Native — and when JavaScript hits a wall, I drop into Kotlin to write the native Android modules that get me past it.</p>
-        <ul class="badges" aria-label="GitHub stats">
+        <p class="bio">I build cross-platform apps with React Native, shipping to both the App Store and Play Store — and when JavaScript needs backup on Android, I drop into Kotlin to write native modules myself.</p>
+        <ul class="badges" aria-label="Stats">
+          <li><span class="badge-key">experience</span><span class="badge-val">4+ yrs</span></li>
           <li><span class="badge-key">stars</span><span class="badge-val" id="stat-stars">54+</span></li>
           <li><span class="badge-key">repos</span><span class="badge-val" id="stat-repos">11+</span></li>
-          <li><span class="badge-key">phnom penh</span><span class="badge-val" id="clock">--:--</span></li>
+          <li><span class="badge-key">phnom penh</span><span class="badge-val" id="clock"><span id="clock-hm">--:--</span>:<span id="clock-sec" class="clock-sec">--</span></span></li>
         </ul>
         <div class="cta-row">
           <a class="btn btn-primary" href="https://github.com/aravind3566" target="_blank" rel="noopener">View GitHub ↗</a>
@@ -464,6 +791,47 @@
         </div>
         <p id="copy-announce" class="visually-hidden" role="status" aria-live="polite"></p>
       </div>
+    </div>
+  </section>
+
+  <section id="experience" class="section">
+    <span class="section-num">// experience.log</span>
+    <h2 class="section-title">Where I've worked</h2>
+    <p class="section-sub">Professional experience shipping mobile products end to end.</p>
+
+    <div class="timeline">
+      <article class="job reveal">
+        <div class="job-head">
+          <h3 class="job-title">Mobile Application Developer</h3>
+          <span class="job-dates">Jul 2023 — Present</span>
+        </div>
+        <p class="job-company">IApparel International Group · Phnom Penh, Cambodia</p>
+        <ul class="job-points">
+          <li>Ship cross-platform Android and iOS apps in React Native, from first commit to App Store and Play Store release.</li>
+          <li>Cut load times by roughly 20% through performance tuning and backend integration work.</li>
+          <li>Write native modules to bridge JavaScript and platform-specific functionality.</li>
+          <li>Own the full issue lifecycle — testing, debugging, and day-to-day user support.</li>
+        </ul>
+      </article>
+
+      <article class="job reveal">
+        <div class="job-head">
+          <h3 class="job-title">Full Stack Developer</h3>
+          <span class="job-dates">Jul 2022 — Jun 2023</span>
+        </div>
+        <p class="job-company">Huminn (OPC) Pvt Ltd · Coimbatore, India</p>
+        <ul class="job-points">
+          <li>Built mobile apps with React Native and Ionic, and web apps with PHP and React.js.</li>
+          <li>Designed APIs connecting mobile and web clients across the product.</li>
+          <li>Worked cross-functionally end to end, from requirements to delivery, in an agile setup.</li>
+        </ul>
+      </article>
+    </div>
+
+    <div class="education reveal">
+      <span class="section-num">// education</span>
+      <div class="edu-row"><span class="edu-degree">M.B.A, Banking &amp; Finance</span><span class="edu-school">Bharathiar University · 2016–2018</span></div>
+      <div class="edu-row"><span class="edu-degree">B.Com (CA)</span><span class="edu-school">Sree Saraswathi Thyagaraja College · 2012–2015</span></div>
     </div>
   </section>
 
@@ -503,21 +871,34 @@
     <h2 class="section-title">Shipped on Google Play</h2>
     <p class="section-sub">Small, focused Android utilities, published under the developer name "A Devs".</p>
 
-    <div class="app-featured reveal">
-      <img class="app-icon" src="https://play-lh.googleusercontent.com/fDV76I6VhdoPZki9WNWYNnehmw9fR2aYAklxDfpmPAP_WyrznPW1LqNsAFd5lphUVHJIM6JFHflISYtr2CJZhrI=w240-h480" alt="" loading="lazy" width="72" height="72">
-      <div class="app-info">
-        <span class="app-featured-tag">Featured</span>
-        <h3 class="app-name">Vin Decoder 2026 Pro</h3>
-        <p class="app-desc">Enter any vehicle's VIN and pull its make, model, year, and engine details. Built for Android, ad-free, and it doesn't collect user data.</p>
-        <div class="app-meta">
-          <span>Auto &amp; Vehicles</span><span>500+ downloads</span><span>No data collected</span>
+    <div class="app-grid">
+      <div class="app-featured reveal">
+        <img class="app-icon" src="https://play-lh.googleusercontent.com/fDV76I6VhdoPZki9WNWYNnehmw9fR2aYAklxDfpmPAP_WyrznPW1LqNsAFd5lphUVHJIM6JFHflISYtr2CJZhrI=w240-h480" alt="" loading="lazy" width="72" height="72">
+        <div class="app-info">
+          <span class="app-featured-tag">Featured</span>
+          <h3 class="app-name">Vin Decoder 2026 Pro</h3>
+          <p class="app-desc">Enter any vehicle's VIN and pull its make, model, year, and engine details. Built for Android, ad-free, and it doesn't collect user data.</p>
+          <div class="app-meta">
+            <span>Auto &amp; Vehicles</span><span>500+ downloads</span><span>No data collected</span>
+          </div>
+          <a class="btn btn-primary" href="https://play.google.com/store/apps/details?id=com.vin_decode_pro" target="_blank" rel="noopener">View on Google Play ↗</a>
         </div>
-        <a class="btn btn-primary" href="https://play.google.com/store/apps/details?id=com.vin_decode_pro" target="_blank" rel="noopener">View on Google Play ↗</a>
+      </div>
+
+      <div class="app-featured reveal">
+        <img class="app-icon" src="https://play-lh.googleusercontent.com/IQ9r4tpcfrrhn4vCApCAIHi9DVn3YV_sKx-ULtpG9CWjdmxZCYUvWw6N_GyPmIy0WQgqFL-o_AF8VE_ltdeTHQ=w240-h480" alt="" loading="lazy" width="72" height="72">
+        <div class="app-info">
+          <h3 class="app-name">Flashlight Pro</h3>
+          <p class="app-desc">A flashlight built for the wrist — vibrant color options and customizable settings for Wear OS smartwatches.</p>
+          <div class="app-meta">
+            <span>Wear OS</span><span>Tools</span><span>1K+ downloads</span>
+          </div>
+          <a class="btn btn-primary" href="https://play.google.com/store/apps/details?id=com.aravind.flashlight" target="_blank" rel="noopener">View on Google Play ↗</a>
+        </div>
       </div>
     </div>
 
     <div class="app-more reveal">
-      <a href="https://play.google.com/store/apps/details?id=com.aravind.flashlight" target="_blank" rel="noopener">Flashlight Pro ↗</a>
       <a href="https://play.google.com/store/apps/details?id=com.postalinfo" target="_blank" rel="noopener">Pin Code Search with Location ↗</a>
       <a href="https://play.google.com/store/apps/details?id=com.ifscfinder" target="_blank" rel="noopener">IFSC Code — All India Bank ↗</a>
     </div>
@@ -532,11 +913,12 @@
 
     <pre class="code-block reveal"><code><span class="tok-com">// the stack, honestly</span>
 <span class="tok-key">const</span> stack <span class="tok-punc">=</span> {
-  core<span class="tok-punc">:</span> [<span class="tok-str">'React Native'</span>, <span class="tok-str">'TypeScript'</span>, <span class="tok-str">'JavaScript'</span>, <span class="tok-str">'Expo'</span>]<span class="tok-punc">,</span>
-  state<span class="tok-punc">:</span> [<span class="tok-str">'Zustand'</span>, <span class="tok-str">'MMKV'</span>]<span class="tok-punc">,</span>
+  core<span class="tok-punc">:</span> [<span class="tok-str">'React Native'</span>, <span class="tok-str">'TypeScript'</span>, <span class="tok-str">'JavaScript'</span>, <span class="tok-str">'Expo'</span>, <span class="tok-str">'React Navigation'</span>]<span class="tok-punc">,</span>
+  state<span class="tok-punc">:</span> [<span class="tok-str">'Zustand'</span>, <span class="tok-str">'Redux'</span>]<span class="tok-punc">,</span>
+  data<span class="tok-punc">:</span> [<span class="tok-str">'MMKV'</span>, <span class="tok-str">'WatermelonDB'</span>, <span class="tok-str">'Google Cloud Firestore'</span>]<span class="tok-punc">,</span>
   styling<span class="tok-punc">:</span> [<span class="tok-str">'NativeWind'</span>]<span class="tok-punc">,</span>
-  native<span class="tok-punc">:</span> [<span class="tok-str">'Kotlin'</span>, <span class="tok-str">'Android SDK'</span>, <span class="tok-str">'Gradle'</span>]<span class="tok-punc">,</span>
-  ship<span class="tok-punc">:</span> [<span class="tok-str">'EAS Build'</span>, <span class="tok-str">'Git'</span>]
+  native<span class="tok-punc">:</span> [<span class="tok-str">'Kotlin'</span>, <span class="tok-str">'Android SDK'</span>, <span class="tok-str">'Gradle'</span>, <span class="tok-str">'Xcode'</span>, <span class="tok-str">'Android Studio'</span>]<span class="tok-punc">,</span>
+  ship<span class="tok-punc">:</span> [<span class="tok-str">'EAS Build'</span>, <span class="tok-str">'Git'</span>, <span class="tok-str">'Firebase Cloud Messaging'</span>, <span class="tok-str">'CI/CD'</span>]
 }<span class="tok-punc">;</span></code></pre>
   </section>
 
@@ -552,6 +934,62 @@
     </ul>
   </section>
 
+  <section id="play" class="section">
+    <span class="section-num">// play.js</span>
+    <h2 class="section-title">Jump the bugs</h2>
+    <p class="section-sub">Pick your platform, then dodge what comes at you — starts slow, speeds up as your score climbs.</p>
+
+    <div class="game reveal" id="game-card">
+      <button class="game-fs-btn" id="game-fullscreen" type="button" aria-label="Toggle fullscreen" title="Fullscreen">⛶</button>
+      <div class="game-platform-select" id="game-platform-select">
+        <p class="game-prompt">Choose your platform</p>
+        <div class="game-buttons">
+          <button class="btn btn-android game-btn" id="game-pick-android" type="button">Android</button>
+          <button class="btn btn-ios game-btn" id="game-pick-ios" type="button">iOS</button>
+        </div>
+      </div>
+
+      <div class="game-play" id="game-play" hidden>
+        <div class="game-scores">
+          <span>Score <strong id="game-score">0</strong></span>
+          <span>Best <strong id="game-best">0</strong></span>
+        </div>
+        <div class="runner" id="runner">
+          <span class="runner-cam" aria-hidden="true"></span>
+          <span class="runner-notch-side" aria-hidden="true"></span>
+          <div class="runner-world" id="runner-world">
+            <div class="runner-bg" aria-hidden="true">
+              <span class="runner-cloud c1"></span>
+              <span class="runner-cloud c2"></span>
+              <span class="runner-cloud c3"></span>
+            </div>
+            <div class="runner-rain" aria-hidden="true">
+              <span class="rain-drop"></span>
+              <span class="rain-drop"></span>
+              <span class="rain-drop"></span>
+              <span class="rain-drop"></span>
+              <span class="rain-drop"></span>
+              <span class="rain-drop"></span>
+            </div>
+            <div class="runner-ground"></div>
+            <div class="runner-player" id="runner-player"></div>
+            <div class="runner-obstacle" id="runner-obstacle"></div>
+          </div>
+          <div class="runner-overlay" id="runner-overlay" hidden>
+            <button class="runner-restart" id="runner-restart" type="button" aria-label="Restart game">↻</button>
+          </div>
+        </div>
+        <p class="game-status" id="game-status" aria-live="polite">Go!</p>
+        <p class="game-controls" id="game-controls-hint">Space / ↑ jump anything · ↓ duck the flying ones</p>
+        <div class="game-buttons" id="game-action-buttons">
+          <button class="btn btn-primary game-btn" id="game-jump" type="button">Jump ⤴</button>
+          <button class="btn btn-ghost game-btn" id="game-duck" type="button">Duck ⤵</button>
+        </div>
+        <button class="link-more game-switch-link" id="game-switch" type="button">Switch platform</button>
+      </div>
+    </div>
+  </section>
+
   <section id="contact" class="section contact">
     <span class="section-num">// contact.sh</span>
     <h2 class="section-title">Let's talk</h2>
@@ -562,18 +1000,54 @@
       <div class="term-line"><span class="prompt">$</span> open <a href="https://www.linkedin.com/in/itsaravind" target="_blank" rel="noopener">linkedin.com/in/itsaravind</a></div>
       <div class="term-line"><span class="prompt">$</span> open <a href="https://x.com/aravind3566" target="_blank" rel="noopener">x.com/aravind3566</a></div>
       <div class="term-line"><span class="prompt">$</span> open <a href="https://github.com/aravind3566" target="_blank" rel="noopener">github.com/aravind3566</a></div>
+      <div class="term-line term-comment"><span class="prompt">#</span> phone available on request — email or LinkedIn work best</div>
     </div>
   </section>
 
 </main>
 
 <footer class="footer">
-  <p>Designed &amp; built by Aravind · <span id="year"></span></p>
+  <p>Designed &amp; built by Aravind Devaraj · <span id="year"></span></p>
 </footer>
+</div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/screenfull.js/6.0.2/screenfull.min.js"></script>
 <script>
 (function(){
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Mobile drawer nav: hamburger opens an off-canvas panel with the same
+  // links as the (hidden-on-mobile) tab bar.
+  var hamburger = document.getElementById('menu-open');
+  var drawerClose = document.getElementById('menu-close');
+  var drawer = document.getElementById('drawer');
+  var drawerBackdrop = document.getElementById('drawer-backdrop');
+
+  function openDrawer(){
+    if(!drawer) return;
+    drawer.classList.add('open');
+    drawerBackdrop.classList.add('open');
+    drawer.setAttribute('aria-hidden', 'false');
+    hamburger.setAttribute('aria-expanded', 'true');
+    document.body.classList.add('drawer-open');
+  }
+  function closeDrawer(){
+    if(!drawer) return;
+    drawer.classList.remove('open');
+    drawerBackdrop.classList.remove('open');
+    drawer.setAttribute('aria-hidden', 'true');
+    hamburger.setAttribute('aria-expanded', 'false');
+    document.body.classList.remove('drawer-open');
+  }
+  if(hamburger) hamburger.addEventListener('click', openDrawer);
+  if(drawerClose) drawerClose.addEventListener('click', closeDrawer);
+  if(drawerBackdrop) drawerBackdrop.addEventListener('click', closeDrawer);
+  document.querySelectorAll('.drawer-link').forEach(function(link){
+    link.addEventListener('click', closeDrawer);
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape') closeDrawer();
+  });
 
   // Theme: dark/light via a git-diff-styled toggle instead of a typical switch
   var root = document.documentElement;
@@ -608,15 +1082,26 @@
   // Footer year
   document.getElementById('year').textContent = new Date().getFullYear();
 
-  // Live Phnom Penh clock
+  // Live Phnom Penh clock — ticks every second, with a little pulse on the seconds digit
   function updateClock(){
     try{
-      var fmt = new Intl.DateTimeFormat('en-GB', { timeZone:'Asia/Phnom_Penh', hour:'2-digit', minute:'2-digit' });
-      document.getElementById('clock').textContent = fmt.format(new Date());
+      var now = new Date();
+      var hmFmt = new Intl.DateTimeFormat('en-GB', { timeZone:'Asia/Phnom_Penh', hour:'2-digit', minute:'2-digit' });
+      var secFmt = new Intl.DateTimeFormat('en-GB', { timeZone:'Asia/Phnom_Penh', second:'2-digit' });
+
+      var hmEl = document.getElementById('clock-hm');
+      var secEl = document.getElementById('clock-sec');
+      if(hmEl) hmEl.textContent = hmFmt.format(now);
+      if(secEl){
+        secEl.textContent = secFmt.format(now);
+        secEl.classList.remove('tick');
+        void secEl.offsetWidth; // restart the animation every tick
+        secEl.classList.add('tick');
+      }
     }catch(e){ /* noop */ }
   }
   updateClock();
-  setInterval(updateClock, 30000);
+  setInterval(updateClock, 1000);
 
   // Live GitHub stats: tries to fetch real star/fork/repo counts from the public API
   // and upgrade the numbers in place. If it fails (rate-limited, offline, or blocked
@@ -661,7 +1146,7 @@
   })();
 
   // Typewriter roles
-  var roles = ['React Native Developer', 'Android Native Module Author', 'Open Source Maintainer'];
+  var roles = ['React Native Developer', 'Android Native Module Author', 'iOS App Store Publisher', 'Open Source Maintainer'];
   var el = document.getElementById('typewriter');
 
   if(reduceMotion){
@@ -701,7 +1186,7 @@
   }
 
   // Scroll-spy tabs
-  var sections = ['hero','projects','apps','stack','contact'].map(function(id){ return document.getElementById(id); });
+  var sections = ['hero','experience','projects','apps','stack','play','contact'].map(function(id){ return document.getElementById(id); });
   var tabs = document.querySelectorAll('.tab');
   if('IntersectionObserver' in window){
     var spy = new IntersectionObserver(function(entries){
@@ -735,6 +1220,264 @@
   }
 
   var announce = document.getElementById('copy-announce');
+
+  // Jump-the-bugs mini-game: pick a platform, then jump or duck obstacles
+  // that scroll past, Chrome-Dino style. High score persists via localStorage
+  // (this is a real deployed page, not a sandboxed preview, so localStorage
+  // works normally once it's live).
+  (function(){
+    var selectEl = document.getElementById('game-platform-select');
+    var playEl = document.getElementById('game-play');
+    var pickAndroidBtn = document.getElementById('game-pick-android');
+    var pickIosBtn = document.getElementById('game-pick-ios');
+    var switchBtn = document.getElementById('game-switch');
+    var jumpBtn = document.getElementById('game-jump');
+    var duckBtn = document.getElementById('game-duck');
+    var actionButtonsEl = document.getElementById('game-action-buttons');
+    var controlsHintEl = document.getElementById('game-controls-hint');
+    var scoreEl = document.getElementById('game-score');
+    var bestEl = document.getElementById('game-best');
+    var statusEl = document.getElementById('game-status');
+    var runnerEl = document.getElementById('runner');
+    var playerEl = document.getElementById('runner-player');
+    var obstacleEl = document.getElementById('runner-obstacle');
+    var overlayEl = document.getElementById('runner-overlay');
+    var actionButtonsEl = document.getElementById('game-action-buttons');
+    var restartBtn = document.getElementById('runner-restart');
+    if(!selectEl || !playerEl) return;
+
+    var fsBtn = document.getElementById('game-fullscreen');
+    var gameCard = document.getElementById('game-card');
+    if(fsBtn && gameCard){
+      fsBtn.addEventListener('click', function(){
+        if(window.screenfull && window.screenfull.isEnabled){
+          window.screenfull.toggle(gameCard);
+          return;
+        }
+        // Fallback if the screenfull library didn't load for some reason
+        var isFs = document.fullscreenElement || document.webkitFullscreenElement;
+        if(!isFs){
+          var req = gameCard.requestFullscreen || gameCard.webkitRequestFullscreen;
+          if(req) req.call(gameCard);
+        } else {
+          var exit = document.exitFullscreen || document.webkitExitFullscreen;
+          if(exit) exit.call(document);
+        }
+      });
+    }
+
+    // Original little robot mascots for the player — colored per platform,
+    // but deliberately NOT Google's Android mascot (no double-antenna) and
+    // NOT wearing any Apple logo. Same design family, different accent + a
+    // couple of shape details so they read as two distinct characters.
+    var playerIcons = {
+      android: '<svg viewBox="0 0 30 36"><defs><radialGradient id="gAndroidFace" cx="35%" cy="28%" r="80%"><stop offset="0%" stop-color="#a6ffce"/><stop offset="55%" stop-color="#3DDC84"/><stop offset="100%" stop-color="#189653"/></radialGradient></defs><line x1="15" y1="2" x2="15" y2="7" stroke="#8a94a6" stroke-width="1.5"/><circle cx="15" cy="2" r="1.6" fill="#3DDC84"/><rect class="gp-limb" x="0" y="16" width="4" height="12" rx="2"/><rect class="gp-limb" x="26" y="16" width="4" height="12" rx="2"/><rect class="gp-body" x="6" y="8" width="18" height="26" rx="9"/><rect fill="url(#gAndroidFace)" x="9" y="13" width="12" height="10" rx="5"/><circle cx="12.5" cy="18" r="1.3" fill="#fff"/><circle cx="17.5" cy="18" r="1.3" fill="#fff"/><rect class="gp-limb" x="9" y="30" width="4" height="5" rx="2"/><rect class="gp-limb" x="17" y="30" width="4" height="5" rx="2"/></svg>',
+      ios: '<svg viewBox="0 0 30 36"><defs><radialGradient id="gIosFace" cx="35%" cy="28%" r="80%"><stop offset="0%" stop-color="#9fd0ff"/><stop offset="55%" stop-color="#007AFF"/><stop offset="100%" stop-color="#0050b3"/></radialGradient></defs><rect class="gp-limb" x="11" y="3" width="8" height="6" rx="4"/><rect class="gp-limb" x="0" y="16" width="4" height="12" rx="2"/><rect class="gp-limb" x="26" y="16" width="4" height="12" rx="2"/><rect class="gp-body" x="6" y="8" width="18" height="26" rx="11"/><rect fill="url(#gIosFace)" x="9" y="13" width="12" height="10" rx="5"/><circle cx="12.5" cy="18" r="1.3" fill="#fff"/><circle cx="17.5" cy="18" r="1.3" fill="#fff"/><rect class="gp-limb" x="9" y="30" width="4" height="5" rx="2"/><rect class="gp-limb" x="17" y="30" width="4" height="5" rx="2"/></svg>'
+    };
+    var obstacleSets = {
+      android: {
+        ground: ['🐛','🕷️','🪳'],
+        air: ['🪰','🦟','🛸']
+      },
+      ios: {
+        ground: ['🔒','🧾','⏳'],
+        air: ['🔔','📩','🎈']
+      }
+    };
+
+    var platform = 'android';
+    var score = 0;
+    var best = 0;
+    var speedMs = 2000;
+    var obstacleType = 'ground';
+    var playing = false;
+    var isJumping = false;
+    var isDucking = false;
+    var awaitingRestart = false;
+    var raining = false;
+    var rainRoundsLeft = 0;
+
+    try{ best = parseInt(localStorage.getItem('platform-jump-best'), 10) || 0; }catch(e){ /* ignore */ }
+    bestEl.textContent = best;
+
+    function saveBest(){
+      try{ localStorage.setItem('platform-jump-best', String(best)); }catch(e){ /* ignore */ }
+    }
+
+    var lastObstacleEmoji = null;
+
+    function pickObstacle(pool){
+      if(pool.length === 1) return pool[0];
+      var choice;
+      do{ choice = pool[Math.floor(Math.random() * pool.length)]; }while(choice === lastObstacleEmoji);
+      return choice;
+    }
+
+    var obstacleTravel = 480; // px, total distance the obstacle crosses
+    var obstacleStart = null;
+    var obstacleDuration = 0;
+    var rafId = null;
+
+    function spawnObstacle(){
+      // Weather: occasionally a rain spell rolls in for a few rounds and eases
+      // the pace back off, then clears.
+      if(raining){
+        rainRoundsLeft--;
+        if(rainRoundsLeft <= 0) raining = false;
+      } else if(Math.random() < 0.12){
+        raining = true;
+        rainRoundsLeft = 4 + Math.floor(Math.random() * 3);
+        if(statusEl) statusEl.textContent = 'Rain — pace eases up a bit.';
+      }
+      runnerEl.classList.toggle('raining', raining);
+
+      obstacleType = Math.random() < 0.65 ? 'ground' : 'air';
+      var emoji = pickObstacle(obstacleSets[platform][obstacleType]);
+      lastObstacleEmoji = emoji;
+      obstacleEl.textContent = emoji;
+      obstacleEl.style.bottom = obstacleType === 'ground' ? '18px' : '46px';
+      obstacleEl.style.transform = 'translateX(0px)';
+
+      obstacleDuration = raining ? Math.round(speedMs * 1.4) : speedMs;
+      obstacleStart = null;
+      rafId = requestAnimationFrame(gameLoop);
+    }
+
+    function shrinkRect(rect, fx, fy){
+      var dx = rect.width * fx;
+      var dy = rect.height * fy;
+      return { left: rect.left + dx, right: rect.right - dx, top: rect.top + dy, bottom: rect.bottom - dy };
+    }
+
+    // Moves the obstacle AND checks collision at the same simulated instant,
+    // every frame — so there's no way for the two to drift out of sync the
+    // way separate CSS-animation + polling-loop timing could.
+    function gameLoop(ts){
+      if(!playing) return;
+      if(obstacleStart === null) obstacleStart = ts;
+      var elapsed = ts - obstacleStart;
+      var progress = Math.min(elapsed / obstacleDuration, 1);
+      obstacleEl.style.transform = 'translateX(' + (-obstacleTravel * progress) + 'px)';
+
+      var p = shrinkRect(playerEl.getBoundingClientRect(), 0.16, 0.05);
+      var o = shrinkRect(obstacleEl.getBoundingClientRect(), 0.14, 0.05);
+      var overlapX = p.left < o.right && p.right > o.left;
+      var overlapY = p.top < o.bottom && p.bottom > o.top;
+      if(overlapX && overlapY){
+        endGame('Hit one!');
+        return;
+      }
+
+      if(progress < 1){
+        rafId = requestAnimationFrame(gameLoop);
+      } else {
+        score++;
+        scoreEl.textContent = score;
+        speedMs = Math.max(680, speedMs - 45);
+        spawnObstacle();
+      }
+    }
+
+    function endGame(message){
+      playing = false;
+      awaitingRestart = true;
+      if(rafId) cancelAnimationFrame(rafId);
+      runnerEl.classList.add('hit');
+      overlayEl.hidden = false;
+      actionButtonsEl.hidden = true;
+      controlsHintEl.hidden = true;
+
+      var text = message + ' Score: ' + score + '.';
+      if(score > best){
+        best = score;
+        bestEl.textContent = best;
+        saveBest();
+        text += ' New best!';
+      }
+      statusEl.textContent = text + ' Tap restart to try again.';
+    }
+
+    function startGame(){
+      score = 0;
+      speedMs = 2000;
+      raining = false;
+      rainRoundsLeft = 0;
+      runnerEl.classList.remove('raining', 'hit');
+      overlayEl.hidden = true;
+      actionButtonsEl.hidden = false;
+      controlsHintEl.hidden = false;
+      scoreEl.textContent = score;
+      playing = true;
+      awaitingRestart = false;
+      statusEl.textContent = 'Go!';
+      spawnObstacle();
+    }
+
+    function jump(){
+      if(awaitingRestart){ startGame(); return; }
+      if(!playing || isJumping) return;
+      isJumping = true;
+      playerEl.classList.remove('ducking');
+      playerEl.classList.add('jumping');
+    }
+
+    var duckTimer = null;
+    function duck(){
+      if(awaitingRestart){ startGame(); return; }
+      if(!playing || isJumping) return;
+      isDucking = true;
+      playerEl.classList.add('ducking');
+      clearTimeout(duckTimer);
+      duckTimer = setTimeout(function(){
+        isDucking = false;
+        playerEl.classList.remove('ducking');
+      }, 650);
+    }
+
+    function choosePlatform(p){
+      platform = p;
+      playerEl.innerHTML = playerIcons[p];
+      runnerEl.classList.toggle('theme-android', p === 'android');
+      runnerEl.classList.toggle('theme-ios', p === 'ios');
+      playEl.classList.toggle('theme-android', p === 'android');
+      playEl.classList.toggle('theme-ios', p === 'ios');
+      selectEl.hidden = true;
+      playEl.hidden = false;
+      startGame();
+    }
+
+    playerEl.addEventListener('animationend', function(){
+      playerEl.classList.remove('jumping');
+      isJumping = false;
+    });
+
+    restartBtn.addEventListener('click', function(){
+      if(awaitingRestart) startGame();
+    });
+
+    pickAndroidBtn.addEventListener('click', function(){ choosePlatform('android'); });
+    pickIosBtn.addEventListener('click', function(){ choosePlatform('ios'); });
+    switchBtn.addEventListener('click', function(){
+      playing = false;
+      if(rafId) cancelAnimationFrame(rafId);
+      selectEl.hidden = false;
+      playEl.hidden = true;
+    });
+
+    jumpBtn.addEventListener('click', jump);
+    duckBtn.addEventListener('click', duck);
+
+    document.addEventListener('keydown', function(e){
+      if(playEl.hidden) return;
+      if(e.code === 'Space' || e.code === 'ArrowUp'){
+        e.preventDefault();
+        jump();
+      } else if(e.code === 'ArrowDown'){
+        e.preventDefault();
+        duck(); // holding the key auto-repeats keydown, which just re-extends the timer
+      }
+    });
+  })();
 
   // Copy email to clipboard (small copy buttons)
   document.querySelectorAll('.copy-btn').forEach(function(btn){
